@@ -86,7 +86,7 @@
                     </td>
                 </tr>
                     
-                <tr>
+                <!-- <tr>
                     <td id="title">생일</td>
                     <td>
                         <input type="text" name="birthyy" maxlength="4" placeholder="년(4자)" size="6" >
@@ -107,9 +107,9 @@
                         </select>
                         <input type="text" name="birthdd" maxlength="2" placeholder="일" size="4" >
                     </td>
-                </tr>
+                </tr> -->
                     
-                <tr>
+               <!--  <tr>
                     <td id="title">이메일</td>
                     <td>
                         <input type="text" name="mail1" maxlength="50">@
@@ -121,9 +121,22 @@
                         </select>
                     </td>
                 </tr>
+                 -->
                     
                 <tr>
                     <td id="title">휴대전화</td>
+                    <td>
+                        <input type="text" name="phone" />
+                    </td>
+                </tr>
+                <tr>
+                    <td id="title">직업</td>
+                    <td>
+                        <input type="text" name="phone" />
+                    </td>
+                </tr>
+                <tr>
+                    <td id="title">나이</td>
                     <td>
                         <input type="text" name="phone" />
                     </td>
