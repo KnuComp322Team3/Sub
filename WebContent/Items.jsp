@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Tables</title>
+    <title>Items</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,14 +29,14 @@
   <%
 	String serverIP="localhost";
 	String portNum = "3306";
-	String url = "jdbc:mysql://"+serverIP+":"+portNum+":dbpro?useSSL=false";
+	String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
 	String user = "knu";
 	String pass = "comp322";
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
 	Class.forName("com.mysql.jdbc.Driver");
-	
+	conn = DriverManager.getConnection(url, user, pass);
 	try {
 	      Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 	      //Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
@@ -54,6 +54,37 @@
 	      System.out.println("SQL Exception : " + e.getMessage());
 	      e.printStackTrace();
 	    }
+	try {
+
+		String query = "select Product_number " + 
+				"		from ITEM " + 
+				"		where Brand_number =  'B0001'" + 
+				"		order by Product_number asc";
+		
+		pstmt = conn.prepareStatement(query);
+
+		
+		rs = pstmt.executeQuery();
+
+		//out.println():print out given text to the current HTML doucment.
+		out.println("<table border=\"1\">");
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int cnt = rsmd.getColumnCount();
+		for(int i = 1; i<=cnt; i++){
+			// Place each column name in the header of this table.
+			out.println("<th>"+rsmd.getColumnName(i)+"</th>");	
+		}
+		while (rs.next()){
+			out.println("<tr>");
+			out.println("<td>"+rs.getString(1)+"</td>");
+			out.println("</tr>");
+		}
+		out.println("</table>");
+		
+		}catch(SQLException ex) {
+			System.err.println("sql error = " + ex.getMessage());
+			//System.exit(1);
+		}
 	%>
 	
   <body id="page-top">
