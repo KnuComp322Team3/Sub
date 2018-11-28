@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Login</title>
+    <title>·Î±×ÀÎ</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -32,8 +32,8 @@
           <form>
             <div class="form-group">
               <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-                <label for="inputEmail">Email address</label>
+                <input type="text" name="inputid" id="inputid" class="form-control" placeholder="InputId" required="required" autofocus="autofocus">
+                <label for="inputId">ID</label>
               </div>
             </div>
             <div class="form-group">
