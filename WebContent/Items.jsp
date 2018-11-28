@@ -26,27 +26,22 @@
     <link href="css/sb-admin.css" rel="stylesheet">
 
   </head>
-	<%
-	String JDBC_DRIVER = "com.mysql.jdbc.Driver";  // jdbc 드라이버 주소
-	String DB_URL = "jdbc:mysql://localhost:3306/dbpro?useSSL=false"; // DB 접속 주소
-	  //localhost는 접속하려는 데이터베이스 주소를 입력하시면 됩니다. localhost를 사용하면 됩니다.
-	  //3306은 데이터베이스에 접속할때 사용하는 포터번호입니다. 설치할때 설정한 포트번호를 사용합니다.
-	  //databasename에는 접속하려는 database의 name을 입력해줍니다.
-	 String USERNAME = "knu"; // DB ID
-	 String PASSWORD = "comp322"; // DB Password
-	 
-	     
-	    // MySql에 사용하는여러 객체를 만들어줍니다.
-	    Connection conn = null;
-	    Statement stmt = null;
-	    ResultSet rs = null;
-	     
-	    System.out.print("User Table 접속 : ");
-	    try {
+  <%
+	String serverIP="localhost";
+	String portNum = "3306";
+	String url = "jdbc:mysql://"+serverIP+":"+portNum+":dbpro?useSSL=false";
+	String user = "knu";
+	String pass = "comp322";
+	Connection conn;
+	PreparedStatement pstmt;
+	ResultSet rs;
+	Class.forName("com.mysql.jdbc.Driver");
+	
+	try {
 	      Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 	      //Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
 	      //URL, ID, password를 입력하여 데이터베이스에 접속합니다.
-	      conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+	      conn = DriverManager.getConnection(url, user, pass);
 	       
 	      // 접속결과를 출력합니다.
 	      if (conn != null){System.out.println("성공");}
@@ -59,9 +54,8 @@
 	      System.out.println("SQL Exception : " + e.getMessage());
 	      e.printStackTrace();
 	    }
-	 
-	  
-    %>
+	%>
+	
   <body id="page-top">
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -195,16 +189,6 @@
                       <th>Brand</th>
                     </tr>
                   </thead>
-                  <!-- <tfoot>
-                    <tr>
-                      <th>Name</th>
-                      <th>Position</th>
-                      <th>Office</th>
-                      <th>Age</th>
-                      <th>Start date</th>
-                      <th>Salary</th>
-                    </tr>
-                  </tfoot> -->
                   <tbody>
                     <tr>
                       <td>Tiger Nixon</td>
