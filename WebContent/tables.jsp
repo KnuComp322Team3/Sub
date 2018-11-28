@@ -30,7 +30,7 @@
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="index.jsp">Start Bootstrap</a>
+      <a class="navbar-brand mr-1" href="index.jsp">COMP322-Team3</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -642,7 +642,7 @@
         <footer class="sticky-footer">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright Â© Your Website 2018</span>
+              <span>Copyright �짤 Your Website 2018</span>
             </div>
           </div>
         </footer>-->
@@ -665,7 +665,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">Ã</span>
+              <span aria-hidden="true">��</span>
             </button>
           </div>
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>

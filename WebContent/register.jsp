@@ -21,6 +21,29 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
 
+	<script type="text/javascript">
+    
+        // 필수 입력정보인 아이디, 비밀번호가 입력되었는지 확인하는 함수
+        function checkValue()
+        {
+            if(!document.userInfo.id.value){
+                alert("아이디를 입력하세요.");
+                return false;
+            }
+            
+            if(!document.userInfo.password.value){
+                alert("비밀번호를 입력하세요.");
+                return false;
+            }
+            
+            // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
+            if(document.userInfo.password.value != document.userInfo.passwordcheck.value ){
+                alert("비밀번호를 동일하게 입력하세요.");
+                return false;
+            }
+        }
+    </script>
+
   </head>
 
   <body class="bg-dark">
@@ -29,41 +52,54 @@
       <div class="card card-register mx-auto mt-5">
         <div class="card-header">Register an Account</div>
         <div class="card-body">
-          <form>
+          <form method="POST" action="/user/JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
-                    <label for="firstName">First name</label>
+                    <input type="text" name="id" id="id" maxlength="9" class="form-control" placeholder="ID" required="required" autofocus="autofocus">
+                    <label for="id">ID*</label>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+				  <label class="btn btn-secondary active">
+				    <input type="radio" name="options" id="option1" autocomplete="off" checked> NULL
+				  </label>
+				  <label class="btn btn-secondary">
+				    <input type="radio" name="options" id="option2" autocomplete="off"> MALE
+				  </label>	
+				  <label class="btn btn-secondary">
+				    <input type="radio" name="options" id="option3" autocomplete="off"> FEMALE
+				  </label>
+				</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="text" id="lastName" class="form-control" placeholder="Last name" required="required">
-                    <label for="lastName">Last name</label>
+                    <input type="password" name = "password" id="inputPassword" maxlength = "20" class="form-control" placeholder="Password" required="required">
+                    <label for="inputPassword">Password*</label>
+                  </div>
+                </div>
+               </div>
+            </div>
+             <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-12">
+                  <div class="form-label-group">
+                    <input type="password" name="passwordcheck" id="confirmPassword" maxlength = "20" class="form-control" placeholder="Confirm password" required="required">
+                    <label for="confirmPassword">Confirm password*</label>
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <div class="form-label-group">
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required">
-                <label for="inputEmail">Email address</label>
-              </div>
-            </div>
-            <div class="form-group">
               <div class="form-row">
-                <div class="col-md-6">
+                 <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-                    <label for="inputPassword">Password</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
-                    <label for="confirmPassword">Confirm password</label>
+                    <input type="text" name="address" id="address" maxlength="30" class="form-control" placeholder="Address" required="required">
+                    <label for="address">Address*</label>
                   </div>
                 </div>
               </div>
