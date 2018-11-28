@@ -54,38 +54,9 @@
 	      System.out.println("SQL Exception : " + e.getMessage());
 	      e.printStackTrace();
 	    }
-	try {
-
-		String query = "select Product_number " + 
-				"		from ITEM " + 
-				"		where Brand_number =  'B0001'" + 
-				"		order by Product_number asc";
-		
-		pstmt = conn.prepareStatement(query);
-
-		
-		rs = pstmt.executeQuery();
-
-		//out.println():print out given text to the current HTML doucment.
-		out.println("<table border=\"1\">");
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int cnt = rsmd.getColumnCount();
-		for(int i = 1; i<=cnt; i++){
-			// Place each column name in the header of this table.
-			out.println("<th>"+rsmd.getColumnName(i)+"</th>");	
-		}
-		while (rs.next()){
-			out.println("<tr>");
-			out.println("<td>"+rs.getString(1)+"</td>");
-			out.println("</tr>");
-		}
-		out.println("</table>");
-		
-		}catch(SQLException ex) {
-			System.err.println("sql error = " + ex.getMessage());
-			//System.exit(1);
-		}
+	
 	%>
+	
 	
   <body id="page-top">
 
@@ -221,6 +192,37 @@
                     </tr>
                   </thead>
                   <tbody>
+       <%
+        try {
+
+              		String query = "select Product_number,Item_name,Item_spec,Item_price,Item_amount,Brand_number " + 
+              				"		from ITEM " + 
+              				"		order by Product_number asc";
+              		
+              		pstmt = conn.prepareStatement(query);
+
+		rs = pstmt.executeQuery();
+
+		//out.println():print out given text to the current HTML doucment.
+	
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int cnt = rsmd.getColumnCount();
+		
+		while (rs.next()){
+			out.println("<tr>");
+			out.println("<td>"+rs.getString(1)+"</td>");
+			out.println("<td>"+rs.getString(2)+"</td>");
+			out.println("<td>"+rs.getString(3)+"</td>");
+			out.println("<td>"+rs.getString(4)+"</td>");
+			out.println("<td>"+rs.getString(5)+"</td>");
+			out.println("</tr>");
+		}
+		
+		}catch(SQLException ex) {
+			System.err.println("sql error = " + ex.getMessage());
+			//System.exit(1);
+		}
+	%>
                     <tr>
                       <td>Tiger Nixon</td>
                       <td>System Architect</td>
