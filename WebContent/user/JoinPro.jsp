@@ -37,7 +37,7 @@
         <br><br>
         <b><font size="5" color="gray">회원가입 정보를 확인하세요.</font></b>
         <br><br>
-        <font color="blue"><%=memberBean.getName() %></font>님 가입을 축하드립니다.
+        <font color="blue"><%=memberBean.getId() %></font>님 가입을 축하드립니다.
         <br><br>
         
         <%-- 자바빈에서 입력된 값을 추출한다. --%>
@@ -52,29 +52,11 @@
                 <td><%=memberBean.getPassword() %></td>
             </tr>
                     
+
             <tr>
-                <td id="title">이름</td>
-                <td><%=memberBean.getName() %></td>
-            </tr>
-                    
-            <tr>
-                <td id="title">성별</td>
-                <td><%=memberBean.getGender()%></td>
-            </tr>
-                    
-            <tr>
-                <td id="title">생일</td>
+                <td id="title">주소</td>
                 <td>
-                    <%=memberBean.getBirthyy() %>년 
-                    <%=memberBean.getBirthmm() %>월 
-                    <%=memberBean.getBirthdd() %>일
-                </td>
-            </tr>
-                    
-            <tr>
-                <td id="title">이메일</td>
-                <td>
-                    <%=memberBean.getMail1() %>@<%=memberBean.getMail2() %>
+                    <%=memberBean.getAddress() %>
                 </td>
             </tr>
                     
@@ -82,12 +64,35 @@
                 <td id="title">휴대전화</td>
                 <td><%=memberBean.getPhone() %></td>
             </tr>
+            
             <tr>
-                <td id="title">주소</td>
+                <td id="title">성별</td>
+                <td><%=memberBean.getGender()%></td>
+            </tr>
+            
+            <tr>
+                <td id="title">나이</td>
                 <td>
-                    <%=memberBean.getAddress() %>
+                    <%=memberBean.getAge() %>
                 </td>
             </tr>
+            
+            <tr>
+                <td id="title">직업</td>
+                <td>
+                    <%=memberBean.getJob() %>
+                </td>
+            </tr>                       
+            <tr>
+                <td id="title">타입</td>
+                <td>
+                    <%=memberBean.getType() %>
+                </td>
+            </tr>             
+                    
+                    
+                    
+
         </table>
         
         <br>
@@ -97,4 +102,3 @@
 </html>
 
 
-출처: http://all-record.tistory.com/114?category=733042 [세상의 모든 기록]

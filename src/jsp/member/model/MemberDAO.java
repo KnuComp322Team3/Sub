@@ -31,17 +31,7 @@ public class MemberDAO
     // 문자열로된 생년월일을 Date로 변경하기 위해 필요
     // java.util.Date클래스로는 오라클의 Date형식과 연동할 수 없다.
     // Oracle의 date형식과 연동되는 java의 Date는 java.sql.Date 클래스이다.
-    public Date stringToDate(MemberBean member)
-    {
-        String year = member.getBirthyy();
-        String month = member.getBirthmm();
-        String day = member.getBirthdd();
-        
-        Date birthday = Date.valueOf(year+"-"+month+"-"+day);
-        
-        return birthday;
-        
-    } // end stringToDate()
+
     
     // 회원정보를 JSP_MEMBER 테이블에 저장하는 메서드
     public void insertMember(MemberBean member) throws SQLException
@@ -61,7 +51,7 @@ public class MemberDAO
             StringBuffer sql = new StringBuffer();
             sql.append("insert into JSP_MEMBER values");
             sql.append("(?, ?, ?, ?, ?, ?, ?, ?, sysdate)");        
-            stringToDate(member);
+
             /* 
              * StringBuffer에 담긴 값을 얻으려면 toString()메서드를
              * 이용해야 한다.
@@ -69,12 +59,12 @@ public class MemberDAO
             pstmt = conn.prepareStatement(sql.toString());
             pstmt.setString(1, member.getId());
             pstmt.setString(2, member.getPassword());
-            pstmt.setString(3, member.getName());
-            pstmt.setString(4, member.getGender());
-            pstmt.setDate(5, stringToDate(member));
-            pstmt.setString(6, member.getMail1()+"@"+member.getMail2());
-            pstmt.setString(7, member.getPhone());
-            pstmt.setString(8, member.getAddress());
+            pstmt.setString(3, member.getAddress());
+            pstmt.setString(4, member.getPhone());
+            pstmt.setString(5, member.getGender());
+            pstmt.setInt(6, Integer.parseInt(member.getAge()));
+            pstmt.setString(7, member.getJob());
+            pstmt.setString(8, member.getType());
             
             // 쿼리 실행
             pstmt.executeUpdate();
@@ -97,3 +87,5 @@ public class MemberDAO
         } // end try~catch 
     } // end insertMember()
 }
+
+
