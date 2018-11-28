@@ -2,9 +2,9 @@
     pageEncoding="EUC-KR"%> 
     
 <%-- 자바빈 클래스 import --%>      
-<%@ page import="jsp.member.model.MemberBean" %>  
+<%@ page import="jsp.member.model.*" %>  
 <%-- DAO import --%>   
-<%@ page import="jsp.member.model.MemberDAO" %> 
+
  
 <html>
 <head>
@@ -95,6 +95,3 @@
     </div>
 </body>
 </html>
-
-
-출처: http://all-record.tistory.com/114?category=733042 [세상의 모든 기록]
