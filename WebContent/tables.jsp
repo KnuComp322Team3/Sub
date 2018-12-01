@@ -147,11 +147,13 @@
             <a class="dropdown-item" href="blank.jsp">Blank Page</a>
           </div>
         </li>
+        <!--  
         <li class="nav-item">
           <a class="nav-link" href="charts.jsp">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Charts</span></a>
         </li>
+        -->
         <li class="nav-item active">
           <a class="nav-link" href="tables.jsp">
             <i class="fas fa-fw fa-table"></i>
@@ -163,13 +165,13 @@
 
         <div class="container-fluid">
 
-          <!-- Breadcrumbs-->
+          <!-- Breadcrumbs
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a href="#">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Tables</li>
-          </ol>
+          </ol>-->
           
 
        
@@ -177,7 +179,7 @@
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-              Data Table Example</div>
+              상품목록</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -191,12 +193,13 @@
                       <th>Brand</th>
                     </tr>
                   </thead>
-                  <tbody>
-       <%
+                  
+      <%
         try {
 
-              		String query = "select Product_number,Item_name,Item_spec,Item_price,Item_amount,Brand_number " + 
-              				"		from ITEM " + 
+              		String query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, I.Item_amount, B.Brand_name " + 
+              				"		from ITEM I, BRAND B " +
+              				"		where I.Brand_number = B.Brand_number "+
               				"		order by Product_number asc";
               		
               		pstmt = conn.prepareStatement(query);
@@ -207,23 +210,26 @@
 	
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int cnt = rsmd.getColumnCount();
-		
+		out.println("<tbody>");
 		while (rs.next()){
-			out.println("<tr>");
+			out.println("<tr style = \"cursor:pointer;\" onClick = \"location.href = 'tables.jsp'\"  onMouseOver = \" window.status = 'tables.jsp' \" onMouseOut = \" window.status = ''\" >");
 			out.println("<td>"+rs.getString(1)+"</td>");
 			out.println("<td>"+rs.getString(2)+"</td>");
 			out.println("<td>"+rs.getString(3)+"</td>");
 			out.println("<td>"+rs.getString(4)+"</td>");
 			out.println("<td>"+rs.getString(5)+"</td>");
+			out.println("<td>"+rs.getString(6)+"</td>");
 			out.println("</tr>");
 		}
-		
+		out.println("</tbody>");
 		}catch(SQLException ex) {
 			System.err.println("sql error = " + ex.getMessage());
 			//System.exit(1);
 		}
 	%>
-                    <tr>
+	  	          <!--
+                    <tbody> 
+                      <tr>
                       <td>Tiger Nixon</td>
                       <td>System Architect</td>
                       <td>Edinburgh</td>
@@ -231,7 +237,8 @@
                       <td>2011/04/25</td>
                       <td>$320,800</td>
                     </tr>
-                  </tbody>
+                  </tbody> -->
+                  
                 </table>
               </div>
             </div>
