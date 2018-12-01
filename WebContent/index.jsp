@@ -216,17 +216,17 @@
             <li class="breadcrumb-item active">Category</li>
           </ol>
 		<!-- Default dropright button -->
-		<form action="tables.jsp" method="get">
+		<form action="tables.jsp" method="POST">
 			<div class="btn-group dropright">
   				<button type="button" class="btn btn-secondary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
    				 철물,원예,사무용품</button>
-				  <div class="dropdown-menu" name="category">
+				  <div class="dropdown-menu">
 				    <!-- Dropdown menu links -->
 				    <h3 class="dropdown-header">철물</h3>
-  						<a type="submit" class="dropdown-item" href="#" name="category" value="010101">삽</a>
-  						<a class="dropdown-item" href="#" value="010102">못</a>
-  						<a class="dropdown-item" href="#" value="010103">열쇠</a>
-					<h3 class="dropdown-header">사무,레져</h3>
+				    	<input  type="submit" class="dropdown-item"	name="category"	value="삽">
+				    	<input type="submit" class="dropdown-item" name="category" value="못">
+				    	<input type="submit" class="dropdown-item" name="category" value="열쇠">
+  					<h3 class="dropdown-header">사무,레져</h3>
   						<a class="dropdown-item" href="#" value="010201">다용도칼</a>
   						<a class="dropdown-item" href="#" value="010202">자석</a>
   						<a class="dropdown-item" href="#" value="010203">필기구</a>
