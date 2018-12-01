@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <html>
 
   <head>
@@ -133,15 +133,14 @@
 
         <div class="container-fluid">
 
-          <!-- Breadcrumbs-->
+		<!-- Breadcrumbs-->
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="#">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item active">Overview</li>
+            <!--  <li class="breadcrumb-item">
+              <a href="index.jsp">Home</a>
+            </li> -->
+            <li class="breadcrumb-item active">Recommendation</li>
           </ol>
-
-          <!-- Icon Cards-->
+          <!-- Icon Cards
           <div class="row">
             <div class="col-xl-3 col-sm-6 mb-3">
               <div class="card text-white bg-primary o-hidden h-100">
@@ -207,7 +206,34 @@
                 </a>
               </div>
             </div>
-          </div>
+          </div> -->
+          
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <!--  <li class="breadcrumb-item">
+              <a href="index.jsp">Home</a>
+            </li> -->
+            <li class="breadcrumb-item active">Category</li>
+          </ol>
+		<!-- Default dropright button -->
+		<form action="tables.jsp" method="get">
+			<div class="btn-group dropright">
+  				<button type="button" class="btn btn-secondary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   				 철물,원예,사무용품</button>
+				  <div class="dropdown-menu" name="category">
+				    <!-- Dropdown menu links -->
+				    <h3 class="dropdown-header">철물</h3>
+  						<a type="submit" class="dropdown-item" href="#" name="category" value="010101">삽</a>
+  						<a class="dropdown-item" href="#" value="010102">못</a>
+  						<a class="dropdown-item" href="#" value="010103">열쇠</a>
+					<h3 class="dropdown-header">사무,레져</h3>
+  						<a class="dropdown-item" href="#" value="010201">다용도칼</a>
+  						<a class="dropdown-item" href="#" value="010202">자석</a>
+  						<a class="dropdown-item" href="#" value="010203">필기구</a>
+
+				 </div>
+			</div>
+          </form>
 
 		 
           <!-- Area Chart Example

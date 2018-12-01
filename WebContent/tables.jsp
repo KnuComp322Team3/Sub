@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ page language="java" import="java.text.*,java.sql.*"%>
 <html>
 
@@ -39,13 +39,13 @@
 	conn = DriverManager.getConnection(url, user, pass);
 	try {
 	      Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
-	      //Class Å¬·¡½ºÀÇ forName()ÇÔ¼ö¸¦ ÀÌ¿ëÇØ¼­ ÇØ´ç Å¬·¡½º¸¦ ¸Ş¸ğ¸®·Î ·Îµå ÇÏ´Â °ÍÀÔ´Ï´Ù.
-	      //URL, ID, password¸¦ ÀÔ·ÂÇÏ¿© µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢¼ÓÇÕ´Ï´Ù.
+	      //Class í´ë˜ìŠ¤ì˜ forName()í•¨ìˆ˜ë¥¼ ì´ìš©í•´ì„œ í•´ë‹¹ í´ë˜ìŠ¤ë¥¼ ë©”ëª¨ë¦¬ë¡œ ë¡œë“œ í•˜ëŠ” ê²ƒì…ë‹ˆë‹¤.
+	      //URL, ID, passwordë¥¼ ì…ë ¥í•˜ì—¬ ë°ì´í„°ë² ì´ìŠ¤ì— ì ‘ì†í•©ë‹ˆë‹¤.
 	      conn = DriverManager.getConnection(url, user, pass);
 	       
-	      // Á¢¼Ó°á°ú¸¦ Ãâ·ÂÇÕ´Ï´Ù.
-	      if (conn != null){System.out.println("¼º°ø");}
-	      else{System.out.println("½ÇÆĞ");}
+	      // ì ‘ì†ê²°ê³¼ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+	      if (conn != null){System.out.println("ì„±ê³µ");}
+	      else{System.out.println("ì‹¤íŒ¨");}
 	         
 	    } catch (ClassNotFoundException e) {
 	      System.out.println("Class Not Found Exection");
@@ -179,7 +179,7 @@
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-              »óÇ°¸ñ·Ï</div>
+              ìƒí’ˆëª©ë¡</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -256,7 +256,7 @@
         <footer class="sticky-footer">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright ï¿½ì§¤ Your Website 2018</span>
+              <span>Copyright å ìŒâ„“ Your Website 2018</span>
             </div>
           </div>
         </footer>-->
@@ -279,7 +279,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">ï¿½ï¿½</span>
+              <span aria-hidden="true">å ì™ì˜™</span>
             </button>
           </div>
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>

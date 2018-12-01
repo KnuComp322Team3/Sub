@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <html>
 
   <head>
@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>È¸¿ø°¡ÀÔ</title>
+    <title>íšŒì›ê°€ì…</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -21,28 +21,6 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
 
-	<script type="text/javascript">
-    
-        // ÇÊ¼ö ÀÔ·ÂÁ¤º¸ÀÎ ¾ÆÀÌµğ, ºñ¹Ğ¹øÈ£°¡ ÀÔ·ÂµÇ¾ú´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
-        function checkValue()
-        {
-            if(!document.userInfo.id.value){
-                alert("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
-                return false;
-            }
-            
-            if(!document.userInfo.password.value){
-                alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
-                return false;
-            }
-            
-            // ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎ¿¡ ÀÔ·ÂµÈ °ªÀÌ µ¿ÀÏÇÑÁö È®ÀÎ
-            if(document.userInfo.password.value != document.userInfo.passwordcheck.value ){
-                alert("ºñ¹Ğ¹øÈ£¸¦ µ¿ÀÏÇÏ°Ô ÀÔ·ÂÇÏ¼¼¿ä.");
-                return false;
-            }
-        }
-    </script>
 
   </head>
 
@@ -53,9 +31,9 @@
         <div class="card-header">Register an Account</div>
         <div class="card-body">
         
-          <form method="POST" action="/user/JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
+          <form method="POST" action="/user/JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()"  >
             <div class="form-group">
-              <label>*´Â ÇÊ¼ö ÀÔ·Â »çÇ×ÀÔ´Ï´Ù.</label>
+              <label>*ëŠ” í•„ìˆ˜ ì…ë ¥ ì‚¬í•­ì…ë‹ˆë‹¤.</label>
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
@@ -75,13 +53,13 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name" required="required" >
+                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name" >
                     <label for="name">Name</label>
                   </div>
                 </div>
                  <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" name="job" id="job" maxlength="15" class="form-control" placeholder="Job" required="required">
+                    <input type="text" name="job" id="job" maxlength="15" class="form-control" placeholder="Job">
                     <label for="job">Job</label>
                   </div>
                 </div>
@@ -111,7 +89,7 @@
               <div class="form-row">
                  <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="text" name="address" id="address" maxlength="30" class="form-control" placeholder="Address" required="required">
+                    <input type="text" name="address" id="address" maxlength="30" class="form-control" placeholder="Address" >
                     <label for="address">Address*</label>
                   </div>
                 </div>
@@ -150,7 +128,7 @@
                   </div>
                 </div>
               </div>
-              <a class="btn btn-primary btn-block" href="login.jsp">Register</a>
+              <input type=submit class="btn btn-primary btn-block" value="register"/>
                <div class="text-center" >
 	            <a class="d-block small mt-3" href="login.jsp">Login Page</a>
 	            <a class="d-block small" href="forgot-password.jsp">Forgot Password?</a>
