@@ -49,11 +49,9 @@ public class MemberDAO
     	Connection conn=null;
     	PreparedStatement pstmt = null;
     	ResultSet rs;
-
         
         try {
             // 커넥션을 가져온다.
-
         	Class.forName("com.mysql.jdbc.Driver");
         	conn = DriverManager.getConnection(url, user, pass);
             
@@ -63,9 +61,6 @@ public class MemberDAO
             // 쿼리 생성한다.
             // 가입일의 경우 자동으로 세팅되게 하기 위해 sysdate를 사용
               
-            
-
-          
             /* 
              * StringBuffer에 담긴 값을 얻으려면 toString()메서드를
              * 이용해야 한다.
@@ -81,6 +76,66 @@ public class MemberDAO
             pstmt.setString(8, member.getJob());
             pstmt.setString(9, member.getType());
             pstmt.setString(10, member.getShipcom_number());
+            
+            // 쿼리 실행
+            pstmt.executeUpdate();
+            // 완료시 커밋
+            conn.commit(); 
+            
+        } catch (ClassNotFoundException | SQLException sqle) {
+            // 오류시 롤백
+            conn.rollback(); 
+            
+            throw new RuntimeException(sqle.getMessage());
+        } finally {
+            // Connection, PreparedStatement를 닫는다.
+            try{
+                if ( pstmt != null ){ pstmt.close(); pstmt=null; }
+                if ( conn != null ){ conn.close(); conn=null;    }
+            }catch(Exception e){
+                throw new RuntimeException(e.getMessage());
+            }
+        } // end try~catch 
+    } // end insertMember()
+    public void changeData(MemberBean member) throws SQLException
+    {
+    	//
+
+    	//
+        String serverIP="localhost";
+    	String portNum = "3306";
+    	String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
+    	String user = "knu";
+    	String pass = "comp322";
+    	Connection conn=null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs;
+        
+        try {
+            // 커넥션을 가져온다.
+        	Class.forName("com.mysql.jdbc.Driver");
+        	conn = DriverManager.getConnection(url, user, pass);
+            
+            // 자동 커밋을 false로 한다.
+            conn.setAutoCommit(false);
+            
+            // 쿼리 생성한다.
+            // 가입일의 경우 자동으로 세팅되게 하기 위해 sysdate를 사용
+              
+            /* 
+             * StringBuffer에 담긴 값을 얻으려면 toString()메서드를
+             * 이용해야 한다.
+             */
+            pstmt = conn.prepareStatement("update CUSTOMER set Password=?, Address=?, Phonenumber=?, Sex=?, Age=?, Customer_name=?, Job=?, Type=?, Shipcom_number=? WHERE id = "+member.getId());
+            pstmt.setString(1, member.getPassword());
+            pstmt.setString(2, member.getAddress());
+            pstmt.setString(3, member.getPhone());
+            pstmt.setString(4, member.getGender());
+            pstmt.setString(5, member.getAge());
+            pstmt.setString(6, member.getName());
+            pstmt.setString(7, member.getJob());
+            pstmt.setString(8, member.getType());
+            pstmt.setString(0, member.getShipcom_number());
             
             // 쿼리 실행
             pstmt.executeUpdate();
@@ -162,7 +217,6 @@ public class MemberDAO
             }
         }
     } // end loginCheck()
-    
     
 }
  
