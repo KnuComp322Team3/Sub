@@ -2,24 +2,26 @@ package jsp.member.model;
  
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.DriverManager;
+
 import javax.naming.NamingException;
  
 import jsp.util.DBConnection;
  
  
 /* Data Access Object
- * Å×ÀÌºí ´ç ÇÑ°³ÀÇ DAO¸¦ ÀÛ¼ºÇÑ´Ù.
+ * í…Œì´ë¸” ë‹¹ í•œê°œì˜ DAOë¥¼ ì‘ì„±í•œë‹¤.
  * 
- * JSP_MEMBER Å×ÀÌºí°ú ¿¬°üµÈ DAO·Î
- * È¸¿ø µ¥ÀÌÅÍ¸¦ Ã³¸®ÇÏ´Â Å¬·¡½ºÀÌ´Ù.
+ * JSP_MEMBER í…Œì´ë¸”ê³¼ ì—°ê´€ëœ DAOë¡œ
+ * íšŒì› ë°ì´í„°ë¥¼ ì²˜ë¦¬í•˜ëŠ” í´ë˜ìŠ¤ì´ë‹¤.
  */
 public class MemberDAO 
 {
     private static MemberDAO instance;
     
-    // ½Ì±ÛÅæ ÆĞÅÏ
+    // ì‹±ê¸€í†¤ íŒ¨í„´
     private MemberDAO(){}
     public static MemberDAO getInstance(){
         if(instance==null)
@@ -27,57 +29,71 @@ public class MemberDAO
         return instance;
     }
     
-    // String -> Date·Î º¯°æÇÏ´Â ¸Ş¼­µå
-    // ¹®ÀÚ¿­·ÎµÈ »ı³â¿ùÀÏÀ» Date·Î º¯°æÇÏ±â À§ÇØ ÇÊ¿ä
-    // java.util.DateÅ¬·¡½º·Î´Â ¿À¶óÅ¬ÀÇ DateÇü½Ä°ú ¿¬µ¿ÇÒ ¼ö ¾ø´Ù.
-    // OracleÀÇ dateÇü½Ä°ú ¿¬µ¿µÇ´Â javaÀÇ Date´Â java.sql.Date Å¬·¡½ºÀÌ´Ù.
+    // String -> Dateë¡œ ë³€ê²½í•˜ëŠ” ë©”ì„œë“œ
+    // ë¬¸ìì—´ë¡œëœ ìƒë…„ì›”ì¼ì„ Dateë¡œ ë³€ê²½í•˜ê¸° ìœ„í•´ í•„ìš”
+    // java.util.Dateí´ë˜ìŠ¤ë¡œëŠ” ì˜¤ë¼í´ì˜ Dateí˜•ì‹ê³¼ ì—°ë™í•  ìˆ˜ ì—†ë‹¤.
+    // Oracleì˜ dateí˜•ì‹ê³¼ ì—°ë™ë˜ëŠ” javaì˜ DateëŠ” java.sql.Date í´ë˜ìŠ¤ì´ë‹¤.
 
     
-    // È¸¿øÁ¤º¸¸¦ JSP_MEMBER Å×ÀÌºí¿¡ ÀúÀåÇÏ´Â ¸Ş¼­µå
+    // íšŒì›ì •ë³´ë¥¼ JSP_MEMBER í…Œì´ë¸”ì— ì €ì¥í•˜ëŠ” ë©”ì„œë“œ
     public void insertMember(MemberBean member) throws SQLException
     {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
+    	//
+
+    	//
+        String serverIP="localhost";
+    	String portNum = "3306";
+    	String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
+    	String user = "knu";
+    	String pass = "comp322";
+    	Connection conn=null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs;
+
         
         try {
-            // Ä¿³Ø¼ÇÀ» °¡Á®¿Â´Ù.
-            conn = DBConnection.getConnection();
+            // ì»¤ë„¥ì…˜ì„ ê°€ì ¸ì˜¨ë‹¤.
+
+        	Class.forName("com.mysql.jdbc.Driver");
+        	conn = DriverManager.getConnection(url, user, pass);
             
-            // ÀÚµ¿ Ä¿¹ÔÀ» false·Î ÇÑ´Ù.
+            // ìë™ ì»¤ë°‹ì„ falseë¡œ í•œë‹¤.
             conn.setAutoCommit(false);
             
-            // Äõ¸® »ı¼ºÇÑ´Ù.
-            // °¡ÀÔÀÏÀÇ °æ¿ì ÀÚµ¿À¸·Î ¼¼ÆÃµÇ°Ô ÇÏ±â À§ÇØ sysdate¸¦ »ç¿ë
-            StringBuffer sql = new StringBuffer();
-            sql.append("insert into JSP_MEMBER values");
-            sql.append("(?, ?, ?, ?, ?, ?, ?, ?, sysdate)");        
+            // ì¿¼ë¦¬ ìƒì„±í•œë‹¤.
+            // ê°€ì…ì¼ì˜ ê²½ìš° ìë™ìœ¼ë¡œ ì„¸íŒ…ë˜ê²Œ í•˜ê¸° ìœ„í•´ sysdateë¥¼ ì‚¬ìš©
+              
+            
 
+          
             /* 
-             * StringBuffer¿¡ ´ã±ä °ªÀ» ¾òÀ¸·Á¸é toString()¸Ş¼­µå¸¦
-             * ÀÌ¿ëÇØ¾ß ÇÑ´Ù.
+             * StringBufferì— ë‹´ê¸´ ê°’ì„ ì–»ìœ¼ë ¤ë©´ toString()ë©”ì„œë“œë¥¼
+             * ì´ìš©í•´ì•¼ í•œë‹¤.
              */
-            pstmt = conn.prepareStatement(sql.toString());
+            pstmt = conn.prepareStatement("insert into CUSTOMER (Id, Password, Address, Phonenumber, Sex, Age, Customer_name, Job, Type, Shipcom_number) values (?,?,?,?,?,?,?,?,?,?)");
             pstmt.setString(1, member.getId());
             pstmt.setString(2, member.getPassword());
             pstmt.setString(3, member.getAddress());
             pstmt.setString(4, member.getPhone());
             pstmt.setString(5, member.getGender());
-            pstmt.setInt(6, Integer.parseInt(member.getAge()));
-            pstmt.setString(7, member.getJob());
-            pstmt.setString(8, member.getType());
+            pstmt.setString(6, member.getAge());
+            pstmt.setString(7, member.getName());
+            pstmt.setString(8, member.getJob());
+            pstmt.setString(9, member.getType());
+            pstmt.setString(10, member.getShipcom_number());
             
-            // Äõ¸® ½ÇÇà
+            // ì¿¼ë¦¬ ì‹¤í–‰
             pstmt.executeUpdate();
-            // ¿Ï·á½Ã Ä¿¹Ô
+            // ì™„ë£Œì‹œ ì»¤ë°‹
             conn.commit(); 
             
-        } catch (ClassNotFoundException | NamingException | SQLException sqle) {
-            // ¿À·ù½Ã ·Ñ¹é
+        } catch (ClassNotFoundException | SQLException sqle) {
+            // ì˜¤ë¥˜ì‹œ ë¡¤ë°±
             conn.rollback(); 
             
             throw new RuntimeException(sqle.getMessage());
         } finally {
-            // Connection, PreparedStatement¸¦ ´İ´Â´Ù.
+            // Connection, PreparedStatementë¥¼ ë‹«ëŠ”ë‹¤.
             try{
                 if ( pstmt != null ){ pstmt.close(); pstmt=null; }
                 if ( conn != null ){ conn.close(); conn=null;    }
@@ -86,6 +102,69 @@ public class MemberDAO
             }
         } // end try~catch 
     } // end insertMember()
+    
+    
+    // ë¡œê·¸ì¸ì‹œ ì•„ì´ë””, ë¹„ë°€ë²ˆí˜¸ ì²´í¬ ë©”ì„œë“œ
+    // ì•„ì´ë””, ë¹„ë°€ë²ˆí˜¸ë¥¼ ì¸ìë¡œ ë°›ëŠ”ë‹¤.
+    public int loginCheck(String id, String pw) 
+    {
+    	String serverIP="localhost";
+    	String portNum = "3306";
+    	String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
+    	String user = "knu";
+    	String pass = "comp322";
+    	Connection conn=null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs;
+
+ 
+        String dbPW = ""; // dbì—ì„œ êº¼ë‚¸ ë¹„ë°€ë²ˆí˜¸ë¥¼ ë‹´ì„ ë³€ìˆ˜
+        int x = -1;
+ 
+        try {
+            // ì¿¼ë¦¬ - ë¨¼ì € ì…ë ¥ëœ ì•„ì´ë””ë¡œ DBì—ì„œ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì¡°íšŒí•œë‹¤.
+            StringBuffer query = new StringBuffer();
+            query.append("SELECT PASSWORD FROM CUSTOMER WHERE ID=?");
+ 
+            
+            //conn = DBConnection.getConnection();
+            Class.forName("com.mysql.jdbc.Driver");
+        	conn = DriverManager.getConnection(url, user, pass);
+            
+            
+            pstmt = conn.prepareStatement(query.toString());
+            pstmt.setString(1, id);
+            rs = pstmt.executeQuery();
+ 
+            if (rs.next()) // ì…ë ¤ëœ ì•„ì´ë””ì— í•´ë‹¹í•˜ëŠ” ë¹„ë²ˆ ìˆì„ê²½ìš°
+            {
+                dbPW = rs.getString("password"); // ë¹„ë²ˆì„ ë³€ìˆ˜ì— ë„£ëŠ”ë‹¤.
+ 
+                if (dbPW.equals(pw)) 
+                    x = 1; // ë„˜ê²¨ë°›ì€ ë¹„ë²ˆê³¼ êº¼ë‚´ì˜¨ ë°°ë²ˆ ë¹„êµ. ê°™ìœ¼ë©´ ì¸ì¦ì„±ê³µ
+                else                  
+                    x = 0; // DBì˜ ë¹„ë°€ë²ˆí˜¸ì™€ ì…ë ¥ë°›ì€ ë¹„ë°€ë²ˆí˜¸ ë‹¤ë¦„, ì¸ì¦ì‹¤íŒ¨
+                
+            } else {
+                x = -1; // í•´ë‹¹ ì•„ì´ë””ê°€ ì—†ì„ ê²½ìš°
+            }
+ 
+            return x;
+ 
+        } catch (Exception sqle) {
+            throw new RuntimeException(sqle.getMessage());
+        } finally {
+            try{
+                if ( pstmt != null ){ pstmt.close(); pstmt=null; }
+                if ( conn != null ){ conn.close(); conn=null;    }
+            }catch(Exception e){
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    } // end loginCheck()
+    
+    
 }
+ 
 
 

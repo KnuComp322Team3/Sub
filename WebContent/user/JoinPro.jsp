@@ -76,8 +76,14 @@
                     <%=memberBean.getAge() %>
                 </td>
             </tr>
-            
             <tr>
+                <td id="title">이름</td>
+                <td>
+                    <%=memberBean.getName() %>
+                </td>
+            </tr>
+            
+            <tr>름
                 <td id="title">직업</td>
                 <td>
                     <%=memberBean.getJob() %>
@@ -88,7 +94,13 @@
                 <td>
                     <%=memberBean.getType() %>
                 </td>
-            </tr>             
+            </tr>
+            <tr>
+                <td id="title">배송회사</td>
+                <td>
+                    <%=memberBean.getShipcom_number() %>
+                </td>
+            </tr>                  
                     
                     
                     

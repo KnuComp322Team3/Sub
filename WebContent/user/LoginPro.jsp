@@ -1,88 +1,44 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%> 
-    
-<%-- 자바빈 클래스 import --%>      
-<%@ page import="jsp.member.model.*" %>  
-<%-- DAO import --%>   
-
- 
+    pageEncoding="EUC-KR"%>
+<%@ page import="jsp.member.model.MemberDAO" %>
 <html>
 <head>
-    <title>회원가입 처리 JSP</title>
-    
-    <!-- css 파일 분리 -->
-    <link href='../../css/join_style.css' rel='stylesheet' style='text/css'/>
-    
+    <title>로그인 처리 JSP</title>
 </head>
 <body>
-    <%-- JoinForm.jsp에서 입력한 정보를 넘겨 받아 처리한다. --%>
-    <% 
-        // 한글 깨짐을 방지하기 위한 인코딩 처리
-        request.setCharacterEncoding("euc-kr"); 
-    %>
-    
-    <%-- 자바빈 관련 액션태그 사용 --%>
-    <jsp:useBean id="memberBean" class="jsp.member.model.MemberBean" />
-    <jsp:setProperty property="*" name="memberBean"/>    
-    
     <%
+        // 인코딩 처리
+        request.setCharacterEncoding("euc-kr"); 
+        
+        // 로그인 화면에 입력된 아이디와 비밀번호를 가져온다
+        String id= request.getParameter("id");
+        String pw = request.getParameter("password");
+        
+        // DB에서 아이디, 비밀번호 확인
         MemberDAO dao = MemberDAO.getInstance();
-    
-        // 회원정보를 담고있는 memberBean을 dao의 insertMember() 메서드로 넘긴다.
-        // insertMember()는 회원 정보를 JSP_MEMBER 테이블에 저장한다.
-        dao.insertMember(memberBean);
+        int check = dao.loginCheck(id, pw);
+        
+        // URL 및 로그인관련 전달 메시지
+        String msg = "";
+        
+        if(check == 1)    // 로그인 성공
+        { 
+            // 세션에 현재 아이디 세팅
+            session.setAttribute("sessionID", id);
+            msg = "../../MainForm.jsp";
+        }
+        else if(check == 0) // 비밀번호가 틀릴경우
+        {
+            msg = "../view/LoginForm.jsp?msg=0";
+        }
+        else    // 아이디가 틀릴경우
+        {
+            msg = "../view/LoginForm.jsp?msg=-1";
+        }
+         
+        // sendRedirect(String URL) : 해당 URL로 이동
+        // URL뒤에 get방식 처럼 데이터를 전달가능
+        response.sendRedirect(msg);
     %>
-    
-    <div id="wrap">
-        <br><br>
-        <b><font size="5" color="gray">회원가입 정보를 확인하세요.</font></b>
-        <br><br>
-        <font color="blue"><%=memberBean.getId() %></font>님 가입을 축하드립니다.
-        <br><br>
-        
-        <%-- 자바빈에서 입력된 값을 추출한다. --%>
-        <table>
-            <tr>
-                <td id="title">아이디</td>
-                <td><%=memberBean.getId() %></td>
-            </tr>
-                        
-            <tr>
-                <td id="title">비밀번호</td>
-                <td><%=memberBean.getPassword() %></td>
-            </tr>
-            <tr>
-                <td id="title">주소</td>
-                <td>
-                    <%=memberBean.getAddress() %>
-                </td>
-            </tr>
-                    
-            <tr>
-                <td id="title">번호</td>
-                <td><%=memberBean.getPhone() %></td>
-            </tr>
-                    
-            <tr>
-                <td id="title">성별</td>
-                <td><%=memberBean.getGender()%></td>
-            </tr>
-            <tr>
-                <td id="title">나이</td>
-                <td><%=memberBean.getAge()%></td>
-            </tr>            
-            <tr>
-                <td id="title">직업</td>
-                <td><%=memberBean.getJob()%></td>
-            </tr>           
-             <tr>
-                <td id="title">타입</td>
-                <td><%=memberBean.getType()%></td>
-            </tr>                   
-        </table>
-        
-        <br>
-        <input type="button" value="확인">
-    </div>
 </body>
 </html>

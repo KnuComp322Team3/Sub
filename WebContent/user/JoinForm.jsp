@@ -41,7 +41,7 @@
         
         <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
         <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 JoinPro.jsp -->
-        <form method="post" action="../pro/JoinPro.jsp" name="userInfo" onsubmit="return checkValue()">
+        <form method="post" action="./JoinPro.jsp" name="userInfo" onsubmit="return checkValue()">
             <table>
                 <tr>
                     <td id="title">아이디</td>
@@ -90,6 +90,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td id="title">이름</td>
+                    <td>
+                        <input type="text" name="name" />
+                    </td>
+                </tr>
+                <tr>
                     <td id="title">직업</td>
                     <td>
                         <input type="text" name="job" />
@@ -98,9 +104,15 @@
                  <tr>
                     <td id="title">타입</td>
                     <td>
-                        <input type="text" name="tpye" />
+                        <input type="text" name="type" />
                     </td>
-                </tr>                                             
+                </tr> 
+                <tr>
+                    <td id="title">배송회사</td>
+                    <td>
+                        <input type="text" name="shipcom_number" />
+                    </td>
+                </tr>                                                
 
             </table>
             <br>
