@@ -25,15 +25,15 @@
         { 
             // 세션에 현재 아이디 세팅
             session.setAttribute("sessionID", id);
-            msg = "../../MainForm.jsp";
+            msg = "../tables.jsp";
         }
         else if(check == 0) // 비밀번호가 틀릴경우
         {
-            msg = "../view/LoginForm.jsp?msg=0";
+            msg = "LoginForm.jsp?msg=0";
         }
         else    // 아이디가 틀릴경우
         {
-            msg = "../view/LoginForm.jsp?msg=-1";
+            msg = "LoginForm.jsp?msg=-1";
         }
          
         // sendRedirect(String URL) : 해당 URL로 이동
