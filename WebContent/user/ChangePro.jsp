@@ -1,35 +1,42 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%> 
-    
-<%-- ÀÚ¹Ùºó Å¬·¡½º import --%>      
-<%@ page import="jsp.member.model.MemberBean" %>  
-<%-- DAO import --%>   
-<%@ page import="jsp.member.model.MemberDAO" %> 
- 
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+
+<%-- ìë°”ë¹ˆ í´ë˜ìŠ¤ import --%>
+<%@ page import="jsp.member.model.MemberBean"%>
+<%-- DAO import --%>
+<%@ page import="jsp.member.model.MemberDAO"%>
+
 <html>
 <head>
-    <title>È¸¿øÁ¤º¸ ¼ö JSP</title>
-    
-    <!-- css ÆÄÀÏ ºĞ¸® -->
-    <link href='../../css/join_style.css' rel='stylesheet' style='text/css'/>
-    
+<title>íšŒì›ì •ë³´ ìˆ˜ì • JSP</title>
+
+<!-- css íŒŒì¼ ë¶„ë¦¬ -->
+<link href='../../css/join_style.css' rel='stylesheet' style='text/css' />
+
 </head>
 <body>
+	<%
+		// í•œê¸€ ê¹¨ì§ì„ ë°©ì§€í•˜ê¸° ìœ„í•œ ì¸ì½”ë”© ì²˜ë¦¬
+		request.setCharacterEncoding("utf-8");
+	%>
+
 	<jsp:useBean id="memberBean" class="jsp.member.model.MemberBean" />
 	<jsp:setProperty property="*" name="memberBean" />
- 	<%
+
+	<%
 		MemberDAO dao = MemberDAO.getInstance();
 
-		// È¸¿øÁ¤º¸¸¦ ´ã°íÀÖ´Â memberBeanÀ» daoÀÇ insertMember() ¸Ş¼­µå·Î ³Ñ±ä´Ù.
-		// insertMember()´Â È¸¿ø Á¤º¸¸¦ JSP_MEMBER Å×ÀÌºí¿¡ ÀúÀåÇÑ´Ù.
+		// íšŒì›ì •ë³´ë¥¼ ë‹´ê³ ìˆëŠ” memberBeanì„ daoì˜ insertMember() ë©”ì„œë“œë¡œ ë„˜ê¸´ë‹¤.
+		// insertMember()ëŠ” íšŒì› ì •ë³´ë¥¼ JSP_MEMBER í…Œì´ë¸”ì— ì €ì¥í•œë‹¤.
+		memberBean.setId((String) session.getAttribute("sessionID"));
 		dao.changeData(memberBean);
-
 	%>
 	<script type="text/javascript">
-	alert("¼öÁ¤ ¿Ï·á");
+		alert("ìˆ˜ì • ì™„ë£Œ");
+		location.href = "../index.jsp";
 	</script>
-	
-	
+
+
 </body>
 </html>
 

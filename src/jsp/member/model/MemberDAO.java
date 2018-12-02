@@ -126,7 +126,7 @@ public class MemberDAO
              * StringBuffer에 담긴 값을 얻으려면 toString()메서드를
              * 이용해야 한다.
              */
-            pstmt = conn.prepareStatement("update CUSTOMER set Password=?, Address=?, Phonenumber=?, Sex=?, Age=?, Customer_name=?, Job=?, Type=?, Shipcom_number=? WHERE id = "+member.getId());
+            pstmt = conn.prepareStatement("update CUSTOMER set Password=?, Address=?, Phonenumber=?, Sex=?, Age=?, Customer_name=?, Job=?, Type=?, Shipcom_number=? WHERE id = ?");
             pstmt.setString(1, member.getPassword());
             pstmt.setString(2, member.getAddress());
             pstmt.setString(3, member.getPhone());
@@ -136,6 +136,7 @@ public class MemberDAO
             pstmt.setString(7, member.getJob());
             pstmt.setString(8, member.getType());
             pstmt.setString(9, member.getShipcom_number());
+            pstmt.setString(10, member.getId());
             
             // 쿼리 실행
             pstmt.executeUpdate();
