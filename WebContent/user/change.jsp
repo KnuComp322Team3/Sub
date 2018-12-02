@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>회원가입</title>
+    <title>회원정보 수정</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,18 +50,19 @@
 
     <div class="container">
       <div class="card card-register mx-auto mt-5">
-        <div class="card-header">Register an Account</div>
+        <div class="card-header">회원정보 수정</div>
         <div class="card-body">
         
-          <form method="GET" action="./JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
+          <form method="GET" action="./ChangePro.jsp" name="userInfo"">
             <div class="form-group">
               <label>*는 필수 입력 사항입니다.</label>
               <div class="form-row">
                 <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="text" name="id" id="id" maxlength="9" class="form-control" placeholder="ID" required="required" autofocus="autofocus">
-                    <label for="id">ID*</label>
-                  </div>
+               
+                    <span name="id" id="id" maxlength="9" class="form-control">
+                    <label for="id" ><%=session.getAttribute("sessionID")%>님의 개인정보 수정</label>
+                    </span>
+                  
                 </div>
                  <div class="col-md-6">
                   <div class="form-label-group">
@@ -157,9 +158,9 @@
                   </div>
                 </div>
               </div>
-              <input type=submit class="btn btn-primary btn-block" value="회원 가입"/>
+              <input type=submit class="btn btn-primary btn-block" value="정보 수정"/>
                <div class="text-center" >
-	            <a class="d-block small mt-3" href="login.jsp">로그인 화면</a>
+	            <a class="d-block small mt-3" href="../index.jsp">홈으로</a>
             </div> 
            </form> 
           </div>

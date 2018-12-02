@@ -20,30 +20,7 @@
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin.css" rel="stylesheet">
-    <script type="text/javascript">
-    
-        function checkValue()
-        {
-            inputForm = eval("document.loginInfo");
-            if(!inputForm.id.value)
-            {
-                alert("아이디를 입력하세요");    
-                inputForm.id.focus();
-                return false;
-            }
-            if(!inputForm.password.value)
-            {
-                alert("비밀번호를 입력하세요");    
-                inputForm.password.focus();
-                return false;
-            }
-        }
-    
-        // 회원가입 버튼 클릭시 회원가입 화면으로 이동
-        function goJoinForm() {
-            location.href="JoinForm.jsp";
-        }    
-    </script>
+
 
   </head>
 

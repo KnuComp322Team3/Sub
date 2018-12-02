@@ -31,7 +31,7 @@
     </script>
     
 </head>
-<body>
+<body class="bg-dark">
     <!-- div 왼쪽, 오른쪽 바깥여백을 auto로 주면 중앙정렬된다.  -->
     <div id="wrap">
         <br><br>

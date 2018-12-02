@@ -1,43 +1,43 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ page import="jsp.member.model.MemberDAO" %>
 <html>
 <head>
-    <title>�α��� ó�� JSP</title>
+    <title>로그인 처리 JSP</title>
 </head>
 <body>
     <%
-        // ���ڵ� ó��
-        request.setCharacterEncoding("euc-kr"); 
+        // 인코딩 처리
+        request.setCharacterEncoding("utf-8"); 
         
-        // �α��� ȭ�鿡 �Էµ� ���̵�� ��й�ȣ�� �����´�
+        // 로그인 화면에 입력된 아이디와 비밀번호를 가져온다
         String id= request.getParameter("id");
         String pw = request.getParameter("password");
         
-        // DB���� ���̵�, ��й�ȣ Ȯ��
+        // DB에서 아이디, 비밀번호 확인
         MemberDAO dao = MemberDAO.getInstance();
         int check = dao.loginCheck(id, pw);
         
-        // URL �� �α��ΰ��� ���� �޽���
+        // URL 및 로그인관련 전달 메시지
         String msg = "";
         
-        if(check == 1)    // �α��� ����
+        if(check == 1)    // 로그인 성공
         { 
-            // ���ǿ� ���� ���̵� ����
+            // 세션에 현재 아이디 세팅
             session.setAttribute("sessionID", id);
-            msg = "../tables.jsp";
+            msg = "../index.jsp";
         }
-        else if(check == 0) // ��й�ȣ�� Ʋ�����
+        else if(check == 0) // 비밀번호가 틀릴경우
         {
             msg = "login.jsp?msg=0";
         }
-        else    // ���̵� Ʋ�����
+        else    // 아이디가 틀릴경우
         {
             msg = "login.jsp?msg=-1";
         }
          
-        // sendRedirect(String URL) : �ش� URL�� �̵�
-        // URL�ڿ� get��� ó�� �����͸� ���ް���
+        // sendRedirect(String URL) : 해당 URL로 이동
+        // URL뒤에 get방식 처럼 데이터를 전달가능
         response.sendRedirect(msg);
     %>
 </body>

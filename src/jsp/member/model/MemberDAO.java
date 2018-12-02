@@ -135,7 +135,7 @@ public class MemberDAO
             pstmt.setString(6, member.getName());
             pstmt.setString(7, member.getJob());
             pstmt.setString(8, member.getType());
-            pstmt.setString(0, member.getShipcom_number());
+            pstmt.setString(9, member.getShipcom_number());
             
             // 쿼리 실행
             pstmt.executeUpdate();
