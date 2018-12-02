@@ -30,22 +30,19 @@
     
         // 회원정보를 담고있는 memberBean을 dao의 insertMember() 메서드로 넘긴다.
         // insertMember()는 회원 정보를 JSP_MEMBER 테이블에 저장한다.
-        dao.insertMember(memberBean);
+        dao.changeData(memberBean);
     %>
     
     <div id="wrap">
         <br><br>
-        <b><font size="5" color="gray">회원가입 정보를 확인하세요.</font></b>
+        <b><font size="5" color="gray">회원 정보 수정</font></b>
         <br><br>
-        <font color="blue"><%=memberBean.getId() %></font>님 가입을 축하드립니다.
+        <font color="blue"><%=memberBean.getId() %></font>님 정보 수정 결과
         <br><br>
         
         <%-- 자바빈에서 입력된 값을 추출한다. --%>
         <table>
-            <tr>
-                <td id="title">아이디</td>
-                <td><%=memberBean.getId() %></td>
-            </tr>
+
                         
             <tr>
                 <td id="title">비밀번호</td>

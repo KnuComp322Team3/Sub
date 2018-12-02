@@ -3,17 +3,19 @@ package jsp.member.model;
 import java.sql.Timestamp;
  
  
-// µ¥ÀÌÅÍÀÇ Àü´ÞÀ» ´ã´çÇÏ´Â Å¬·¡½º - DTO
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ - DTO
 public class MemberBean 
 {
-    private String id;            // ¾ÆÀÌµð
-    private String password;     // ºñ¹Ð¹øÈ£
-    private String address;        // ÁÖ¼Ò
-    private String phone;        // ÀüÈ­
-    private String gender;        // ¼ºº°
-    private String age;			//³ªÀÌ
-    private String job;			//Á÷¾÷
-    private String type;		//type
+    private String id;            // ï¿½ï¿½ï¿½Ìµï¿½
+    private String password;     // ï¿½ï¿½Ð¹ï¿½È£
+    private String address;        // ï¿½Ö¼ï¿½
+    private String phone;        // ï¿½ï¿½È­
+    private char gender;        // ï¿½ï¿½ï¿½ï¿½
+    private int age;			//ï¿½ï¿½ï¿½ï¿½
+    private String name;
+    private String job;			//ï¿½ï¿½ï¿½ï¿½
+    private String type;		//type+-
+    private int shipcom_number;
 
     
     public String getId() {return id;}
@@ -23,22 +25,28 @@ public class MemberBean
     public void setPassword(String password) {this.password = password;}
     
     public String getAddress() {return address;}
-    public void setName(String address) {this.address = address;}
+    public void setAddress(String address) {this.address = address;}
     
     public String getPhone() {return phone;}
     public void setPhone(String phone) {this.phone = phone;}
     
-    public String getGender() {return gender;}
-    public void setGender(String gender) {this.gender = gender;}
+    public String getGender() {return String.valueOf(gender);}
+    public void setGender(String gender) {this.gender = gender.charAt(0);}
     
-    public String getAge() {return age;}
-    public void setAddress(String address) {this.age = age;}
+    public String getAge() {return Integer.toString(age);}
+    public void setAge(String age) {this.age =Integer.parseInt(age);}
+    
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
     
     public String getJob() {return job;}
     public void setJob(String job) {this.job = job;}
     
     public String getType() {return type;}
     public void setType(String type) {this.type = type;}
+    
+    public String getShipcom_number() {return Integer.toString(shipcom_number);}
+    public void setShipcom_number(String shipcom_number) {this.shipcom_number =Integer.parseInt(shipcom_number);}
 
 }
 
