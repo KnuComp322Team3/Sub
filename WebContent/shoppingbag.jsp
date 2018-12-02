@@ -4,14 +4,21 @@
 <html>
 
   <head>
-
+	<%
+		//alert(session.getAttribute("SessionID"));
+		String id = "";
+		id = (String) session.getAttribute("sessionID"); // request에서 id 파라미터를 가져온다
+		if (id == null || id.equals("")) { // id가 Null 이거나 없을 경우
+			response.sendRedirect("/Subject/user/login.jsp"); // 로그인 페이지로 리다이렉트 한다.
+		}
+	%>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Items</title>
+    <title>Shoppingbag</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -135,22 +142,12 @@
       <div id="content-wrapper">
 
         <div class="container-fluid">
-
-          <!-- Breadcrumbs
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="#">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item active">Tables</li>
-          </ol>-->
-          
-
-       
+    
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-              상품목록</div>
+              장바구니</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -160,8 +157,9 @@
                       <th>Item Name</th>
                       <th>Item Spec</th>
                       <th>Item Price</th>
+                      <th>Ordered Amount</th>
                       <th>Brand</th>
-                      <th>상세보기</th>
+                      <th>상품빼기</th>
                     </tr>
                   </thead>
            <%
@@ -182,32 +180,22 @@
 				//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 				conn = DriverManager.getConnection(url, user, pass);
 				conn.setAutoCommit(false);
-			    String category_number="";
-			 	String section = (request.getParameter("section") == null) ? "" : request.getParameter("section");
-			 	//section = request.getParameter("section");
-			 	if(section.equals("삽")) category_number = "010101";	if(section.equals("못")) category_number = "010102";	if(section.equals("열쇠")) category_number = "010103";
-			 	if(section.equals("다용도칼")) category_number = "010201";if(section.equals("자석")) category_number = "010202";if(section.equals("필기구")) category_number = "010203";
 			 	String query="";
 
 			 	
-			 	if (!section.equals("")){
-			 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
-						"		from ITEM I, BRAND B, CATEGORY C "+
+			 
+			 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, IC.Ordered_amount,B.Brand_name " + 
+						"		from ITEM I, BRAND B, SHOPPINGBAG S, INCLUDE IC "+
 						"		where I.Brand_number = B.Brand_number "+
-						"		AND C.Category_number = I.Category_number " +
-						" 		AND C.Category_number = ? " +
+						" 		AND IC.Product_number = I.Product_number" +
+						"		AND IC.Transaction_number = S.Transaction_number" +	
+						" 		AND S.Id = ?" +
+						" 		AND S.Paydate IS NULL"	+
 						"		ORDER BY I.Product_number ASC";        		
-			 	}
-        		else{
-        			query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
-          				"		from ITEM I, BRAND B, CATEGORY C "+
-          				"		where I.Brand_number = B.Brand_number "+
-          				"		AND C.Category_number = I.Category_number " +
-          				"		ORDER BY I.Product_number ASC";
-        		}
-			 	
+
+        					 	
        			pstmt = conn.prepareStatement(query);
-           		if(!category_number.equals("")) pstmt.setString(1,category_number);
+           		if(!id.equals("")) pstmt.setString(1,id);
             	rs = pstmt.executeQuery(); 		
 
 		
@@ -224,6 +212,7 @@
 					out.println("<td>"+rs.getString(3)+"</td>");
 					out.println("<td>"+rs.getString(4)+"</td>");
 					out.println("<td>"+rs.getString(5)+"</td>");
+					out.println("<td>"+rs.getString(6)+"</td>");
 					out.println("<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"product_number\" value=\""+rs.getString(1)+"\"/></form></td>");
 					out.println("</tr>");
 				}

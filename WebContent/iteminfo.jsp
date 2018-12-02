@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Items</title>
+    <title>COMP322-Team3</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,8 +26,7 @@
     <link href="css/sb-admin.css" rel="stylesheet">
 
   </head>
- 
-	
+  
 	
   <body id="page-top">
 
@@ -97,7 +96,7 @@
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="index.jsp">
+          <a class="nav-link active" href="index.jsp">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -118,15 +117,8 @@
             <a class="dropdown-item" href="blank.jsp">Blank Page</a>
           </div>
         </li>
-        <!--  
         <li class="nav-item">
-          <a class="nav-link" href="charts.jsp">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-        </li>
-        -->
-        <li class="nav-item active">
-          <a class="nav-link" href="tables.jsp">
+          <a class="nav-link " href="tables.jsp">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>
         </li>
@@ -136,35 +128,7 @@
 
         <div class="container-fluid">
 
-          <!-- Breadcrumbs
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="#">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item active">Tables</li>
-          </ol>-->
-          
-
-       
-          <!-- DataTables Example -->
-          <div class="card mb-3">
-            <div class="card-header">
-              <i class="fas fa-table"></i>
-              상품목록</div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>					                    
-                      <th>Product Number</th>
-                      <th>Item Name</th>
-                      <th>Item Spec</th>
-                      <th>Item Price</th>
-                      <th>Brand</th>
-                      <th>상세보기</th>
-                    </tr>
-                  </thead>
-           <%
+<%
 			String serverIP="localhost";
 			String portNum = "3306";
 			String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
@@ -175,39 +139,26 @@
 			ResultSet rs;
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, pass);
-	
-      		try {
+			String product_number = "";
+			try {
 				Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 				//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
 				//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 				conn = DriverManager.getConnection(url, user, pass);
 				conn.setAutoCommit(false);
-			    String category_number="";
-			 	String section = (request.getParameter("section") == null) ? "" : request.getParameter("section");
+				
+			 	product_number = (request.getParameter("product_number") == null) ? "" : request.getParameter("product_number");
 			 	//section = request.getParameter("section");
-			 	if(section.equals("삽")) category_number = "010101";	if(section.equals("못")) category_number = "010102";	if(section.equals("열쇠")) category_number = "010103";
-			 	if(section.equals("다용도칼")) category_number = "010201";if(section.equals("자석")) category_number = "010202";if(section.equals("필기구")) category_number = "010203";
 			 	String query="";
-
-			 	
-			 	if (!section.equals("")){
-			 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
-						"		from ITEM I, BRAND B, CATEGORY C "+
-						"		where I.Brand_number = B.Brand_number "+
-						"		AND C.Category_number = I.Category_number " +
-						" 		AND C.Category_number = ? " +
-						"		ORDER BY I.Product_number ASC";        		
-			 	}
-        		else{
-        			query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
-          				"		from ITEM I, BRAND B, CATEGORY C "+
-          				"		where I.Brand_number = B.Brand_number "+
-          				"		AND C.Category_number = I.Category_number " +
-          				"		ORDER BY I.Product_number ASC";
-        		}
-			 	
+		 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name, C.Section " + 
+					"		from ITEM I, BRAND B, CATEGORY C "+
+					"		where I.Brand_number = B.Brand_number "+
+					"		AND C.Category_number = I.Category_number " +
+					" 		AND I.Product_number = ? " +
+					"		ORDER BY I.Product_number ASC";        		
+		 	        		
        			pstmt = conn.prepareStatement(query);
-           		if(!category_number.equals("")) pstmt.setString(1,category_number);
+           		pstmt.setString(1,product_number);
             	rs = pstmt.executeQuery(); 		
 
 		
@@ -217,17 +168,22 @@
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int cnt = rsmd.getColumnCount();
 				out.println("<tbody>");
-				while (rs.next()){
-					out.println("<tr>");
-					out.println("<td>"+rs.getString(1)+"</td>");
-					out.println("<td>"+rs.getString(2)+"</td>");
-					out.println("<td>"+rs.getString(3)+"</td>");
-					out.println("<td>"+rs.getString(4)+"</td>");
-					out.println("<td>"+rs.getString(5)+"</td>");
-					out.println("<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"product_number\" value=\""+rs.getString(1)+"\"/></form></td>");
-					out.println("</tr>");
+				while (rs.next()){%>
+		<!-- Default dropright button -->
+		<div  class="card text-center" style="width: 30rem;" >
+		  <img class="card-img-top" src="item01.png" ><!-- src="/Subject/img/item01.png" ><!--alt="Card image cap"-->
+		  <div class="card-body">
+		    <h5 class="card-title"><% out.println(rs.getString(2));%></h5>
+		    <p class="card-text">이 상품은 <% out.println(rs.getString(2));%>입니다</p>
+		  </div>
+		  <ul class="list-group list-group-flush">
+		    <li class="list-group-item">상품코드 <% out.println(rs.getString(1));%></li>
+		    <li class="list-group-item">상품규격 <% out.println(rs.getString(3));%></li>
+		    <li class="list-group-item">가격 <% out.println(rs.getString(4));%>원</li>
+		    <li class="list-group-item">브랜드 <% out.println(rs.getString(5));%></li>
+		  </ul>
+		  <%
 				}
-				out.println("</tbody>");
 		        pstmt.executeQuery();
 	            conn.commit(); 
 		      	} catch (ClassNotFoundException | SQLException sqle) {
@@ -245,24 +201,31 @@
 			        }
 		        }
          
-	%>
-
-                  
-                </table>
-              </div>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-          </div>
-
-          <p class="small text-center text-muted my-5">
-            <em>More table examples coming soon...</em>
-          </p>
-
-        </div>
-        <!-- /.container-fluid -->
-
- 
-
+		%>
+		<form method="POST" action="shoppingbag.jsp" name="userInfo" onsubmit ="return checkValue()"  >
+          <div class="card-body">
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-4">
+               		<select class="custom-select custom-select mb-2">
+						  <option selected value="NULL"></option>
+					</select>
+				</div>
+				<div class="col-md-4">
+		      		<input class="form-control" type="number" name="quantity" min="1" max="10000000">
+		      	</div>
+		      	<div class="col-md-4">
+		      	  <div class="input-group-append">
+		      		<input type="submit" name="product_number" style="height:40px" value="submit">
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</form> 
+		  
+		</div>
+					
       </div>
       <!-- /.content-wrapper -->
 
@@ -281,7 +244,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">로그아웃</span>
+              <span aria-hidden="true">��</span>
             </button>
           </div>
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
@@ -301,6 +264,7 @@
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 
@@ -309,6 +273,7 @@
 
     <!-- Demo scripts for this page-->
     <script src="js/demo/datatables-demo.js"></script>
+    <script src="js/demo/chart-area-demo.js"></script>
 
   </body>
 
