@@ -218,8 +218,8 @@
 						ready to end your current session.</div>
 					<div class="modal-footer">
 						<button class="btn btn-secondary" type="button"
-							data-dismiss="modal">Cancel</button>
-						<a class="btn btn-primary" href="/Subject/user/login.jsp">Logout</a>
+							data-dismiss="modal">취소</button>
+						<a class="btn btn-primary" href="/Subject/user/logout.jsp">로그아웃</a>
 					</div>
 				</div>
 			</div>

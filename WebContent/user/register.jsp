@@ -21,28 +21,7 @@
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin.css" rel="stylesheet">
 
-	<script type="text/javascript">
-    
-        // 필수 입력정보인 아이디, 비밀번호가 입력되었는지 확인하는 함수
-        function checkValue()
-        {
-            if(!document.userInfo.id.value){
-                alert("아이디를 입력하세요.");
-                return false;
-            }
-            
-            if(!document.userInfo.password.value){
-                alert("비밀번호를 입력하세요.");
-                return false;
-            }
-            
-            // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
-            if(document.userInfo.password.value != document.userInfo.passwordcheck.value ){
-                alert("비밀번호를 동일하게 입력하세요.");
-                return false;
-            }
-        }
-    </script>
+
 
   </head>
 
@@ -53,7 +32,7 @@
         <div class="card-header">Register an Account</div>
         <div class="card-body">
         
-          <form method="GET" action="./JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
+          <form method="GET" action="./JoinPro.jsp" name="userInfo">
             <div class="form-group">
               <label>*는 필수 입력 사항입니다.</label>
               <div class="form-row">
