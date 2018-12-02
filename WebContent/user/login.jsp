@@ -66,6 +66,7 @@
             }
             else if(msg!=null && msg.equals("-1"))
             {    
+            	
                 out.println("<br>");
                 out.println("<font color='red' size='5'>아이디를 확인해 주세요.</font>");
             }
