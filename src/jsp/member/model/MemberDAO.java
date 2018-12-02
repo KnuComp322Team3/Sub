@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.sql.DriverManager;
 
 import javax.naming.NamingException;
@@ -74,6 +76,21 @@ public class MemberDAO {
 			pstmt.setString(8, member.getJob());
 			pstmt.setString(9, member.getType());
 			pstmt.setString(10, member.getShipcom_number());
+
+			// 쿼리 실행
+			pstmt.executeUpdate();
+			// 완료시 커밋
+			conn.commit();
+			
+			Date today = new Date();
+			SimpleDateFormat  time= new SimpleDateFormat("hh:mm:ss");
+			String Transcation_number=time.format(today)+member.getId().charAt(0);
+
+			
+			pstmt = conn.prepareStatement("insert into SHOPPINGBAG (Transaction_number,Id) values (?,?)");
+			pstmt.setString(1, Transcation_number);
+			pstmt.setString(2, member.getId());
+
 
 			// 쿼리 실행
 			pstmt.executeUpdate();

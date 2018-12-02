@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ page language="java" import="java.text.*,java.sql.*"%>
 <html>
 
 <head>
@@ -55,11 +56,9 @@
 		<form
 			class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Search for..."
-					aria-label="Search" aria-describedby="basic-addon2">
+				
 				<div class="input-group-append">
-					<button class="btn btn-primary" type="button">
-						<i class="fas fa-search"></i>
+					
 					</button>
 				</div>
 			</div>
@@ -67,32 +66,7 @@
 
 		<!-- Navbar -->
 		<ul class="navbar-nav ml-auto ml-md-0">
-			<li class="nav-item dropdown no-arrow mx-1"><a
-				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-bell fa-fw"></i> <span
-					class="badge badge-danger">9+</span>
-			</a>
-				<div class="dropdown-menu dropdown-menu-right"
-					aria-labelledby="alertsDropdown">
-					<a class="dropdown-item" href="#">Action</a> <a
-						class="dropdown-item" href="#">Another action</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Something else here</a>
-				</div></li>
-			<li class="nav-item dropdown no-arrow mx-1"><a
-				class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i> <span
-					class="badge badge-danger">7</span>
-			</a>
-				<div class="dropdown-menu dropdown-menu-right"
-					aria-labelledby="messagesDropdown">
-					<a class="dropdown-item" href="#">Action</a> <a
-						class="dropdown-item" href="#">Another action</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Something else here</a>
-				</div></li>
+			
 			<li class="nav-item dropdown no-arrow"><a
 				class="nav-link dropdown-toggle" href="#" id="userDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -104,7 +78,6 @@
 					<%
 						session.getAttribute("sessionID");
 					%>
-					<a class="dropdown-item" href="#">Activity Log</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#" data-toggle="modal"
 						data-target="#logoutModal">로그아웃</a>
@@ -118,12 +91,12 @@
 		<!-- Sidebar -->
 		<ul class="sidebar navbar-nav">
 			<li class="nav-item active"><a class="nav-link" href="index.jsp">
-					<i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span>
+					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&분류검색</span>
 			</a></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="pagesDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-fw fa-folder"></i> <span>Pages</span>
+				aria-expanded="false"> <i class="fas fa-fw fa-folder"></i> <span>쇼핑백</span>
 			</a>
 				<div class="dropdown-menu" aria-labelledby="pagesDropdown">
 					<h6 class="dropdown-header">Login Screens:</h6>
@@ -144,7 +117,7 @@
         </li>
         -->
 			<li class="nav-item"><a class="nav-link" href="tables.jsp">
-					<i class="fas fa-fw fa-table"></i> <span>Tables</span>
+					<i class="fas fa-fw fa-table"></i> <span>상품 목록</span>
 			</a></li>
 		</ul>
 
@@ -158,6 +131,113 @@
               <a href="index.jsp">Home</a>
             </li> -->
 					<li class="breadcrumb-item active">Recommendation</li>
+					<!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              추천 상품목록</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>					                    
+                      <th>Product Number</th>
+                      <th>Item Name</th>
+                      <th>Item Spec</th>
+                      <th>Item Price</th>
+                      <th>Brand</th>
+                      <th>상세보기</th>
+                    </tr>
+                  </thead>
+           <%
+			String serverIP="localhost";
+			String portNum = "3306";
+			String url = "jdbc:mysql://"+serverIP+":"+portNum+"/dbpro?useSSL=false";
+			String user = "knu";
+			String pass = "comp322";
+			Connection conn=null;
+			PreparedStatement pstmt=null;
+			ResultSet rs;
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, pass);
+	
+      		try {
+				Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
+				//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
+				//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+				conn = DriverManager.getConnection(url, user, pass);
+				conn.setAutoCommit(false);
+			    String category_number="";
+			 	String section = (request.getParameter("section") == null) ? "" : request.getParameter("section");
+			 	//section = request.getParameter("section");
+			 	if(section.equals("삽")) category_number = "010101";	if(section.equals("못")) category_number = "010102";	if(section.equals("열쇠")) category_number = "010103";
+			 	if(section.equals("다용도칼")) category_number = "010201";if(section.equals("자석")) category_number = "010202";if(section.equals("필기구")) category_number = "010203";
+			 	String query="";
+
+			 	
+			 	if (!section.equals("")){
+			 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
+						"		from ITEM I, BRAND B, CATEGORY C "+
+						"		where I.Brand_number = B.Brand_number "+
+						"		AND C.Category_number = I.Category_number " +
+						" 		AND C.Category_number = ? " +
+						"		ORDER BY I.Product_number ASC";        		
+			 	}
+        		else{
+        			query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name " + 
+          				"		from ITEM I, BRAND B, CATEGORY C "+
+          				"		where I.Brand_number = B.Brand_number "+
+          				"		AND C.Category_number = I.Category_number " +
+          				"		ORDER BY I.Product_number ASC";
+        		}
+			 	
+       			pstmt = conn.prepareStatement(query);
+           		if(!category_number.equals("")) pstmt.setString(1,category_number);
+            	rs = pstmt.executeQuery(); 		
+
+		
+
+		//out.println():print out given text to the current HTML doucment.
+	
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int cnt = rsmd.getColumnCount();
+				out.println("<tbody>");
+				while (rs.next()){
+					out.println("<tr>");
+					out.println("<td>"+rs.getString(1)+"</td>");
+					out.println("<td>"+rs.getString(2)+"</td>");
+					out.println("<td>"+rs.getString(3)+"</td>");
+					out.println("<td>"+rs.getString(4)+"</td>");
+					out.println("<td>"+rs.getString(5)+"</td>");
+					out.println("<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"product_number\" value=\""+rs.getString(1)+"\"/></form></td>");
+					out.println("</tr>");
+				}
+				out.println("</tbody>");
+		        pstmt.executeQuery();
+	            conn.commit(); 
+		      	} catch (ClassNotFoundException | SQLException sqle) {
+		             // 오류시 롤백
+		             conn.rollback(); 
+		             
+		             throw new RuntimeException(sqle.getMessage());
+		        } finally {
+		             // Connection, PreparedStatement를 닫는다.
+			        try{
+			             if ( pstmt != null ){ pstmt.close(); pstmt=null; }
+			             if ( conn != null ){ conn.close(); conn=null;    }
+			        }catch(Exception e){
+			        throw new RuntimeException(e.getMessage());
+			        }
+		        }
+         
+	%>
+
+                  
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
 				</ol>
 
 
@@ -177,12 +257,12 @@
 							철물,원예,사무용품</button>
 						<div class="dropdown-menu">
 							<!-- Dropdown menu links -->
-							<h3 class="dropdown-header">철물</h3>
+							<h2 class="dropdown-header">철물(중분류)</h2>
 							<input type="submit" class="dropdown-item" name="section"
 								value="삽"> <input type="submit" class="dropdown-item"
 								name="section" value="못"> <input type="submit"
 								class="dropdown-item" name="section" value="열쇠">
-							<h3 class="dropdown-header">사무,레져</h3>
+							<h2 class="dropdown-header">사무,레져(중분류)</h2>
 							<input type="submit" class="dropdown-item" name="section"
 								value="다용도칼"> <input type="submit" class="dropdown-item"
 								name="section" value="자석"> <input type="submit"
