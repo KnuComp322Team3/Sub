@@ -125,13 +125,6 @@
             <a class="dropdown-item" href="blank.jsp">Blank Page</a>
           </div>
         </li>
-        <!--  
-        <li class="nav-item">
-          <a class="nav-link" href="charts.jsp">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-        </li>
-        -->
         <li class="nav-item active">
           <a class="nav-link" href="tables.jsp">
             <i class="fas fa-fw fa-table"></i>
@@ -182,6 +175,30 @@
 				conn.setAutoCommit(false);
 			 	String query="";
 
+			 	String amountMethod = (request.getParameter("amountMethod") == null) ? "" : request.getParameter("amountMethod");
+			 	/*if(!amountMethod.equals("")){
+			 		pstmt = conn.prepareStatement("SELECT S.Transaction_number FROM SHOPPINGBAG S WHERE S.Id = ? AND S.Paydate is NULL");
+			 		rs = pstmt.executeQuery();
+			 		pstmt.setString(1,id);
+					String transaction_number = "";
+					if (rs.next()) {
+						
+						pstmt = conn.prepareStatement("update INCLUDE set Ordered_amount=? WHERE Transaction_number=? AND Product_number=?" );
+			            pstmt.setString(1, request.getParameter("orderAmount"));
+			            pstmt.setString(2, rs.getString(1));
+			            pstmt.setString(3, request.getParameter("product_number"));
+			            
+			            pstmt = conn.prepareStatement("insert into INCLUDE (Id, Password, Address, Phonenumber, Sex, Age, Customer_name, Job, Type, Shipcom_number) values (?,?,?,?,?,?,?,?,?,?)");
+			            pstmt.setString(1, member.getId());
+			            pstmt.setString(2, rs.getString(1));
+			            pstmt.setString(3, request.getParameter("product_number"));
+					}
+					
+			 	}
+			 	else{
+			 		
+			 	}*/
+			 	
 			 	
 			 
 			 		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, IC.Ordered_amount,B.Brand_name " + 
@@ -213,7 +230,9 @@
 					out.println("<td>"+rs.getString(4)+"</td>");
 					out.println("<td>"+rs.getString(5)+"</td>");
 					out.println("<td>"+rs.getString(6)+"</td>");
-					out.println("<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"product_number\" value=\""+rs.getString(1)+"\"/></form></td>");
+					//수정 버튼
+					
+					out.println("<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"amountMethod\" value=\""+rs.getString(1)+"\"/></form></td>");
 					out.println("</tr>");
 				}
 				out.println("</tbody>");
