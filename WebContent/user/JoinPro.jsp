@@ -1,115 +1,116 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%> 
-    
-<%-- �ڹٺ� Ŭ���� import --%>      
-<%@ page import="jsp.member.model.MemberBean" %>  
-<%-- DAO import --%>   
-<%@ page import="jsp.member.model.MemberDAO" %> 
- 
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+
+<%-- 자바빈 클래스 import --%>
+<%@ page import="jsp.member.model.MemberBean"%>
+<%-- DAO import --%>
+<%@ page import="jsp.member.model.MemberDAO"%>
+
 <html>
 <head>
-    <title>ȸ������ ó�� JSP</title>
-    
-    <!-- css ���� �и� -->
-    <link href='../../css/join_style.css' rel='stylesheet' style='text/css'/>
-    
+<title>회원가입 처리 JSP</title>z
+
+<!-- css 파일 분리 -->
+<link href='../../css/join_style.css' rel='stylesheet' style='text/css' />
+
 </head>
 <body>
-    <%-- JoinForm.jsp���� �Է��� ������ �Ѱ� �޾� ó���Ѵ�. --%>
-    <% 
-        // �ѱ� ������ �����ϱ� ���� ���ڵ� ó��
-        request.setCharacterEncoding("euc-kr"); 
-    %>
-    
-    <%-- �ڹٺ� ���� �׼��±� ��� --%>
-    <jsp:useBean id="memberBean" class="jsp.member.model.MemberBean" />
-    <jsp:setProperty property="*" name="memberBean"/>    
-    
-    <%
-        MemberDAO dao = MemberDAO.getInstance();
-    
-        // ȸ�������� ����ִ� memberBean�� dao�� insertMember() �޼���� �ѱ��.
-        // insertMember()�� ȸ�� ������ JSP_MEMBER ���̺��� �����Ѵ�.
-        dao.insertMember(memberBean);
-    %>
-    
-    <div id="wrap">
-        <br><br>
-        <b><font size="5" color="gray">ȸ������ ������ Ȯ���ϼ���.</font></b>
-        <br><br>
-        <font color="blue"><%=memberBean.getId() %></font>�� ������ ���ϵ帳�ϴ�.
-        <br><br>
-        
-        <%-- �ڹٺ󿡼� �Էµ� ���� �����Ѵ�. --%>
-        <table>
-            <tr>
-                <td id="title">���̵�</td>
-                <td><%=memberBean.getId() %></td>
-            </tr>
-                        
-            <tr>
-                <td id="title">��й�ȣ</td>
-                <td><%=memberBean.getPassword() %></td>
-            </tr>
-                    
+	<%-- JoinForm.jsp에서 입력한 정보를 넘겨 받아 처리한다. --%>
+	<%
+		// 한글 깨짐을 방지하기 위한 인코딩 처리
+		request.setCharacterEncoding("utf-8");
+	%>
 
-            <tr>
-                <td id="title">�ּ�</td>
-                <td>
-                    <%=memberBean.getAddress() %>
-                </td>
-            </tr>
-                    
-            <tr>
-                <td id="title">�޴���ȭ</td>
-                <td><%=memberBean.getPhone() %></td>
-            </tr>
-            
-            <tr>
-                <td id="title">����</td>
-                <td><%=memberBean.getGender()%></td>
-            </tr>
-            
-            <tr>
-                <td id="title">����</td>
-                <td>
-                    <%=memberBean.getAge() %>
-                </td>
-            </tr>
-            <tr>
-                <td id="title">�̸�</td>
-                <td>
-                    <%=memberBean.getName() %>
-                </td>
-            </tr>
-            
-            <tr>��
-                <td id="title">����</td>
-                <td>
-                    <%=memberBean.getJob() %>
-                </td>
-            </tr>                       
-            <tr>
-                <td id="title">Ÿ��</td>
-                <td>
-                    <%=memberBean.getType() %>
-                </td>
-            </tr>
-            <tr>
-                <td id="title">���ȸ��</td>
-                <td>
-                    <%=memberBean.getShipcom_number() %>
-                </td>
-            </tr>                  
-                    
-                    
-                    
+	<%-- 자바빈 관련 액션태그 사용 --%>
+	<jsp:useBean id="memberBean" class="jsp.member.model.MemberBean" />
+	<jsp:setProperty property="*" name="memberBean" />
+	<%
+		//alert(session.getAttribute("SessionID"));
+		String id = "";
+		id = (String) session.getAttribute("sessionID"); // request에서 id 파라미터를 가져온다
+		if (id == null || id.equals("")) { // id가 Null 이거나 없을 경우
+			response.sendRedirect("/Subject/user/login.jsp"); // 로그인 페이지로 리다이렉트 한다.
+		}
+	%>
+	<%
+		MemberDAO dao = MemberDAO.getInstance();
 
-        </table>
-        
-        <br>
-        <input type="button" value="Ȯ��">
-    </div>
+		// 회원정보를 담고있는 memberBean을 dao의 insertMember() 메서드로 넘긴다.
+		// insertMember()는 회원 정보를 JSP_MEMBER 테이블에 저장한다.
+		dao.insertMember(memberBean);
+	%>
+	<script type="text/javascript">
+    
+    
+        //버튼 클릭시 회원정보 수정 화면으로 이동
+        function goIndex() {
+            location.href="../index";
+        }    
+    </script>
+	<div id="wrap">
+		<br>
+		<br> <b><font size="5" color="gray">회원가입 정보를 확인하세요.</font></b> <br>
+		<br> <font color="blue"><%=memberBean.getId()%></font>님 가입을
+		축하드립니다. <br>
+		<br>
+
+		<%-- 자바빈에서 입력된 값을 추출한다. --%>
+		<table>
+			<tr>
+				<td id="title">아이디</td>
+				<td><%=memberBean.getId()%></td>
+			</tr>
+
+			<tr>
+				<td id="title">비밀번호</td>
+				<td><%=memberBean.getPassword()%></td>
+			</tr>
+
+
+			<tr>
+				<td id="title">주소</td>
+				<td><%=memberBean.getAddress()%></td>
+			</tr>
+
+			<tr>
+				<td id="title">휴대전화</td>
+				<td><%=memberBean.getPhone()%></td>
+			</tr>
+
+			<tr>
+				<td id="title">성별</td>
+				<td><%=memberBean.getGender()%></td>
+			</tr>
+
+			<tr>
+				<td id="title">나이</td>
+				<td><%=memberBean.getAge()%></td>
+			</tr>
+			<tr>
+				<td id="title">이름</td>
+				<td><%=memberBean.getName()%></td>
+			</tr>
+
+			<tr>
+				
+				<td id="title">직업</td>
+				<td><%=memberBean.getJob()%></td>
+			</tr>
+			<tr>
+				<td id="title">타입</td>
+				<td><%=memberBean.getType()%></td>
+			</tr>
+			<tr>
+				<td id="title">배송회사</td>
+				<td><%=memberBean.getShipcom_number()%></td>
+			</tr>
+
+
+
+
+		</table>
+
+		<br> <input type="button" value="확인" onclick="goIndex()">
 </body>
 </html>
 

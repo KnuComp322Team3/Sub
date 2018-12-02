@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <html>
 
   <head>
@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>È¸¿ø°¡ÀÔ</title>
+    <title>íšŒì›ê°€ì…</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -23,22 +23,22 @@
 
 	<script type="text/javascript">
     
-        // ÇÊ¼ö ÀÔ·ÂÁ¤º¸ÀÎ ¾ÆÀÌµğ, ºñ¹Ğ¹øÈ£°¡ ÀÔ·ÂµÇ¾ú´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+        // í•„ìˆ˜ ì…ë ¥ì •ë³´ì¸ ì•„ì´ë””, ë¹„ë°€ë²ˆí˜¸ê°€ ì…ë ¥ë˜ì—ˆëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
         function checkValue()
         {
             if(!document.userInfo.id.value){
-                alert("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+                alert("ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
                 return false;
             }
             
             if(!document.userInfo.password.value){
-                alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+                alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
                 return false;
             }
             
-            // ºñ¹Ğ¹øÈ£¿Í ºñ¹Ğ¹øÈ£ È®ÀÎ¿¡ ÀÔ·ÂµÈ °ªÀÌ µ¿ÀÏÇÑÁö È®ÀÎ
+            // ë¹„ë°€ë²ˆí˜¸ì™€ ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì— ì…ë ¥ëœ ê°’ì´ ë™ì¼í•œì§€ í™•ì¸
             if(document.userInfo.password.value != document.userInfo.passwordcheck.value ){
-                alert("ºñ¹Ğ¹øÈ£¸¦ µ¿ÀÏÇÏ°Ô ÀÔ·ÂÇÏ¼¼¿ä.");
+                alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ë™ì¼í•˜ê²Œ ì…ë ¥í•˜ì„¸ìš”.");
                 return false;
             }
         }
@@ -53,9 +53,9 @@
         <div class="card-header">Register an Account</div>
         <div class="card-body">
         
-          <form method="POST" action="./JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
+          <form method="GET" action="./JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()">
             <div class="form-group">
-              <label>*´Â ÇÊ¼ö ÀÔ·Â »çÇ×ÀÔ´Ï´Ù.</label>
+              <label>*ëŠ” í•„ìˆ˜ ì…ë ¥ ì‚¬í•­ì…ë‹ˆë‹¤.</label>
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
@@ -75,13 +75,13 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name" required="required" >
+                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name">
                     <label for="name">Name</label>
                   </div>
                 </div>
                  <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" name="job" id="job" maxlength="15" class="form-control" placeholder="Job" required="required">
+                    <input type="text" name="job" id="job" maxlength="15" class="form-control" placeholder="Job">
                     <label for="job">Job</label>
                   </div>
                 </div>
@@ -91,7 +91,7 @@
               <div class="form-row">
                 <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="password" name = "password" id="inputPassword" maxlength = "20" class="form-control" placeholder="Password" required="required">
+                    <input type="password" name = "password" id="inputPassword" maxlength = "20" class="form-control" placeholder="Password" required="required" >
                     <label for="inputPassword">Password*</label>
                   </div>
                 </div>
@@ -119,16 +119,16 @@
             </div>
             <div class="form-group">
               <div class="form-row">
-                 <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
+                 <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name="sex">
 						  <option selected value="Null">Sex</option>
 						  <option value="M">Male</option>
 						  <option value="F">Female</option>
 					</select>
                   </div>
-                  <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
-						  <option selected value="Null">Age</option>
+                  <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name ="age">
+						  <option selected value="NULL">Age</option>
 						  <option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
 						  <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option>
 						  <option value="30">30</option><option value="31">31</option><option value="33">33</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option>
@@ -141,19 +141,25 @@
 						  <option value="100">100</option>
 					</select>
                   </div>
-                  <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
+                  <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name = "type">
 						  <option selected value="NULL">Type</option>
 						  <option value="retailer">Retailer</option>
 						  <option value="wholesaler">Wholesaler</option>
 					</select>
                   </div>
+                   <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name="shipcom_number">
+						  <option selected value="1">í•œì§„íƒë°°</option>
+						  <option value="2">ìš°ì²´êµ­íƒë°°</option>
+						  <option value="3">ë¡œì  íƒë°°</option>
+					</select>
+                  </div>
                 </div>
               </div>
-              <a class="btn btn-primary btn-block" href="JoinPro.jsp">Register</a>
+              <input type=submit class="btn btn-primary btn-block" value="íšŒì› ê°€ì…"/>
                <div class="text-center" >
-	            <a class="d-block small mt-3" href="LoginForm.jsp">Login Page</a>
-	            <a class="d-block small" href="forgot-password.jsp">Forgot Password?</a>
+	            <a class="d-block small mt-3" href="login.jsp">ë¡œê·¸ì¸ í™”ë©´</a>
             </div> 
            </form> 
           </div>

@@ -29,7 +29,8 @@
       <div class="card card-login mx-auto mt-5">
         <div class="card-header">Login</div>
         <div class="card-body">
-          <form>
+          <form name="loginInfo" method="post" action="LoginPro.jsp" 
+                onsubmit="return checkValue()">
             <div class="form-group">
               <div class="form-label-group">
                 <input type="text" name="inputid" id="inputid" class="form-control" placeholder="InputId" required="required" autofocus="autofocus">

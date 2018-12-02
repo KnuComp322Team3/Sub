@@ -10,17 +10,39 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>회원가입</title>
+    <title>회원정보 수정</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-z
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="../css/sb-admin.css" rel="stylesheet">
 
+	<script type="text/javascript">
+    
+        // 필수 입력정보인 아이디, 비밀번호가 입력되었는지 확인하는 함수
+        function checkValue()
+        {
+            if(!document.userInfo.id.value){
+                alert("아이디를 입력하세요.");
+                return false;
+            }
+            
+            if(!document.userInfo.password.value){
+                alert("비밀번호를 입력하세요.");
+                return false;
+            }
+            
+            // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
+            if(document.userInfo.password.value != document.userInfo.passwordcheck.value ){
+                alert("비밀번호를 동일하게 입력하세요.");
+                return false;
+            }
+        }
+    </script>
 
   </head>
 
@@ -28,18 +50,19 @@ z
 
     <div class="container">
       <div class="card card-register mx-auto mt-5">
-        <div class="card-header">Register an Account</div>
+        <div class="card-header">회원정보 수정</div>
         <div class="card-body">
         
-          <form method="POST" action="/user/JoinPro.jsp" name="userInfo" onsubmit ="return checkValue()"  >
+          <form method="GET" action="./ChangePro.jsp" name="userInfo"">
             <div class="form-group">
               <label>*는 필수 입력 사항입니다.</label>
               <div class="form-row">
                 <div class="col-md-6">
-                  <div class="form-label-group">
-                    <input type="text" name="id" id="id" maxlength="9" class="form-control" placeholder="ID" required="required" autofocus="autofocus">
-                    <label for="id">ID*</label>
-                  </div>
+               
+                    <span name="id" id="id" maxlength="9" class="form-control">
+                    <label for="id" ><%=session.getAttribute("sessionID")%>님의 개인정보 수정</label>
+                    </span>
+                  
                 </div>
                  <div class="col-md-6">
                   <div class="form-label-group">
@@ -53,7 +76,7 @@ z
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-label-group">
-                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name" >
+                    <input type="text" name="name" id="name" maxlength="15" class="form-control" placeholder="Name">
                     <label for="name">Name</label>
                   </div>
                 </div>
@@ -69,7 +92,7 @@ z
               <div class="form-row">
                 <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="password" name = "password" id="inputPassword" maxlength = "20" class="form-control" placeholder="Password" required="required">
+                    <input type="password" name = "password" id="inputPassword" maxlength = "20" class="form-control" placeholder="Password" required="required" >
                     <label for="inputPassword">Password*</label>
                   </div>
                 </div>
@@ -89,7 +112,7 @@ z
               <div class="form-row">
                  <div class="col-md-12">
                   <div class="form-label-group">
-                    <input type="text" name="address" id="address" maxlength="30" class="form-control" placeholder="Address" >
+                    <input type="text" name="address" id="address" maxlength="30" class="form-control" placeholder="Address" required="required">
                     <label for="address">Address*</label>
                   </div>
                 </div>
@@ -97,16 +120,16 @@ z
             </div>
             <div class="form-group">
               <div class="form-row">
-                 <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
+                 <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name="sex">
 						  <option selected value="Null">Sex</option>
 						  <option value="M">Male</option>
 						  <option value="F">Female</option>
 					</select>
                   </div>
-                  <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
-						  <option selected value="Null">Age</option>
+                  <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name ="age">
+						  <option selected value="NULL">Age</option>
 						  <option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
 						  <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option>
 						  <option value="30">30</option><option value="31">31</option><option value="33">33</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option>
@@ -119,19 +142,25 @@ z
 						  <option value="100">100</option>
 					</select>
                   </div>
-                  <div class="col-md-4">
-               		<select class="custom-select custom-select-lg mb-3">
+                  <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name = "type">
 						  <option selected value="NULL">Type</option>
 						  <option value="retailer">Retailer</option>
 						  <option value="wholesaler">Wholesaler</option>
 					</select>
                   </div>
+                   <div class="col-md-3">
+               		<select class="custom-select custom-select-lg mb-3" name="shipcom_number">
+						  <option selected value="1">한진택배</option>
+						  <option value="2">우체국택배</option>
+						  <option value="3">로젠택배</option>
+					</select>
+                  </div>
                 </div>
               </div>
-              <input type=submit class="btn btn-primary btn-block" value="register"/>
+              <input type=submit class="btn btn-primary btn-block" value="정보 수정"/>
                <div class="text-center" >
-	            <a class="d-block small mt-3" href="login.jsp">Login Page</a>
-	            <a class="d-block small" href="forgot-password.jsp">Forgot Password?</a>
+	            <a class="d-block small mt-3" href="../index.jsp">홈으로</a>
             </div> 
            </form> 
           </div>
@@ -141,11 +170,11 @@ z
     
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
   </body>
 
