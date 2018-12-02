@@ -158,7 +158,7 @@
 										<th>Item Price</th>
 										<th>Ordered Amount</th>
 										<th>Brand</th>
-										<th>상품빼기</th>
+										<th>주문 수량 변경</th>
 									</tr>
 								</thead>
 								<%
@@ -173,30 +173,31 @@
 									Class.forName("com.mysql.jdbc.Driver");
 									conn = DriverManager.getConnection(url, user, pass);
 									try {
-									Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
-									//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
-									//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
-									conn = DriverManager.getConnection(url, user, pass);
-									conn.setAutoCommit(false);
-									String query = "";
+										Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
+										//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
+										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+										conn = DriverManager.getConnection(url, user, pass);
+										conn.setAutoCommit(false);
+										String query = "";
 
-									String amountMethod = (request.getParameter("amountMethod") == null) ? "" : request.getParameter("amountMethod");
-									
-									if (!amountMethod.equals("")) {
-										pstmt = conn.prepareStatement(
-												"SELECT S.Transaction_number FROM SHOPPINGBAG S WHERE S.Id = ? AND S.Paydate IS NULL");
-										pstmt.setString(1, id);
-										rs = pstmt.executeQuery();
-										conn.commit();
-										String transaction_number = (rs.next() == false) ? "" : rs.getString(1);
-										if (!transaction_number.equals("")) {
-											pstmt = conn.prepareStatement("SELECT I.Product_number " + "FROM INCLUDE I "
-													+ "WHERE I.Transaction_number = ? " + "AND I.Product_number = ? ");
-											pstmt.setString(1, transaction_number);
-											pstmt.setString(2, request.getParameter("product_number"));
+										String amountMethod = (request.getParameter("amountMethod") == null) ? ""
+												: request.getParameter("amountMethod");
+
+										if (!amountMethod.equals("")) {
+											pstmt = conn.prepareStatement(
+													"SELECT S.Transaction_number FROM SHOPPINGBAG S WHERE S.Id = ? AND S.Paydate IS NULL");
+											pstmt.setString(1, id);
 											rs = pstmt.executeQuery();
 											conn.commit();
-										}
+											String transaction_number = (rs.next() == false) ? "" : rs.getString(1);
+											if (!transaction_number.equals("")) {
+												pstmt = conn.prepareStatement("SELECT I.Product_number " + "FROM INCLUDE I "
+														+ "WHERE I.Transaction_number = ? " + "AND I.Product_number = ? ");
+												pstmt.setString(1, transaction_number);
+												pstmt.setString(2, request.getParameter("product_number"));
+												rs = pstmt.executeQuery();
+												conn.commit();
+											}
 											if (rs.next()) {
 												//이 물품이 장바구니에 있을때
 												if (Integer.parseInt(request.getParameter("orderAmount")) != 0) {
@@ -205,12 +206,12 @@
 													pstmt.setString(1, request.getParameter("orderAmount"));
 													pstmt.setString(2, transaction_number);
 													pstmt.setString(3, request.getParameter("product_number"));
-													
+
 												} else {
 													pstmt = conn.prepareStatement(
-															"delete INCLUDE where Product_number = ? and Transaction_number = ?");
+															"delete from INCLUDE where Product_number = ? and Transaction_number = ?");
 													pstmt.setString(1, request.getParameter("product_number"));
-													pstmt.setString(2, rs.getString(1));
+													pstmt.setString(2, transaction_number);
 												}
 											} else {
 												//이 물품이 장바구니에 없을때				        
@@ -223,30 +224,28 @@
 											}
 											pstmt.executeUpdate();
 											conn.commit();
-											
-										}
-									
 
-									
-								} catch (ClassNotFoundException | SQLException sqle) {
-									// 오류시 롤백
-									conn.rollback();
-									throw new RuntimeException(sqle.getMessage());
-								} finally {
-									// Connection, PreparedStatement를 닫는다.
-									try {
-										if (pstmt != null) {
-											pstmt.close();
-											pstmt = null;
 										}
-										if (conn != null) {
-											conn.close();
-											conn = null;
+
+									} catch (ClassNotFoundException | SQLException sqle) {
+										// 오류시 롤백
+										conn.rollback();
+										throw new RuntimeException(sqle.getMessage());
+									} finally {
+										// Connection, PreparedStatement를 닫는다.
+										try {
+											if (pstmt != null) {
+												pstmt.close();
+												pstmt = null;
+											}
+											if (conn != null) {
+												conn.close();
+												conn = null;
+											}
+										} catch (Exception e) {
+											throw new RuntimeException(e.getMessage());
 										}
-									} catch (Exception e) {
-										throw new RuntimeException(e.getMessage());
 									}
-								}
 
 									try {
 										Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
@@ -274,18 +273,21 @@
 										int cnt = rsmd.getColumnCount();
 										out.println("<tbody>");
 										while (rs.next()) {
-											out.println("<tr>");
-											out.println("<td>" + rs.getString(1) + "</td>");
+											out.println("<tr><form class=\"tr\" method=\"GET\" action=\"shoppingbag.jsp\" >");
+											out.println("<td><input type=\"text\" style=\"width:0px\" name = \"product_number\" value=\"" + rs.getString(1) + "\"/>"+rs.getString(1)+"</td>");
 											out.println("<td>" + rs.getString(2) + "</td>");
 											out.println("<td>" + rs.getString(3) + "</td>");
 											out.println("<td>" + rs.getString(4) + "</td>");
 											out.println("<td>" + rs.getString(5) + "</td>");
 											out.println("<td>" + rs.getString(6) + "</td>");
 											//수정 버튼
-
-											out.println(
-													"<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"amountMethod\" value=\""
-															+ rs.getString(1) + "\"/></form></td>");
+											out.println("<td>");
+								%>
+								
+									<input class="form-control" type="number" name="orderAmount" min="0" max="10000000">
+								
+								<%
+									out.println("<input type=\"submit\" name=\"amountMethod\" value=\"modify\"/></form></td>");
 											out.println("</tr>");
 										}
 										out.println("</tbody>");
