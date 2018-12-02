@@ -150,10 +150,9 @@
                   </div>
                 </div>
               </div>
-              <a class="btn btn-primary btn-block" href="JoinPro.jsp">Register</a>
+              <a class="btn btn-primary btn-block" href="JoinPro.jsp">로그인</a>
                <div class="text-center" >
-	            <a class="d-block small mt-3" href="LoginForm.jsp">Login Page</a>
-	            <a class="d-block small" href="forgot-password.jsp">Forgot Password?</a>
+	            <a class="d-block small mt-3" href="LoginForm.jsp">회원 가입</a>
             </div> 
            </form> 
           </div>
