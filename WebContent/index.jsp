@@ -92,7 +92,7 @@
 		<!-- Sidebar -->
 		<ul class="sidebar navbar-nav">
 			<li class="nav-item active"><a class="nav-link" href="index.jsp">
-					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&분류검색</span>
+					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&카테고리</span>
 			</a></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="pagesDropdown"
@@ -292,15 +292,13 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Ready to
-							Leave?</h5>
+						<h5 class="modal-title" id="exampleModalLabel">경고</h5>
 						<button class="close" type="button" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">x</span>
 						</button>
 					</div>
-					<div class="modal-body">Select "Logout" below if you are
-						ready to end your current session.</div>
+					<div class="modal-body">정말 로그아웃 하시겠습니까?</div>
 					<div class="modal-footer">
 						<button class="btn btn-secondary" type="button"
 							data-dismiss="modal">취소</button>
