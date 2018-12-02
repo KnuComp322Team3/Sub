@@ -202,21 +202,21 @@
 		        }
          
 		%>
-		<form method="POST" action="shoppingbag.jsp" name="userInfo" onsubmit ="return checkValue()"  >
+		<form method="GET" action="shoppingbag.jsp" name="userInfo" onsubmit ="return checkValue()"  >
           <div class="card-body">
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-4">
-               		<select class="custom-select custom-select mb-2">
-						  <option selected value="NULL"></option>
+               		<select class="custom-select custom-select mb-2" name="product_number">
+					  <option selected value=<% out.println(product_number); %>><% out.println(product_number); %></option>
 					</select>
 				</div>
 				<div class="col-md-4">
-		      		<input class="form-control" type="number" name="quantity" min="1" max="10000000">
+		      		<input class="form-control" type="number" name="orderAmount" min="1" max="10000000">
 		      	</div>
 		      	<div class="col-md-4">
 		      	  <div class="input-group-append">
-		      		<input type="submit" name="product_number" style="height:40px" value="submit">
+		      		<input type="submit" name="amountMethod" style="height:40px" value="add">
 		          </div>
 		        </div>
 		      </div>
