@@ -31,6 +31,11 @@
         {
             msg = "login.jsp?msg=0";
         }
+        else if(check ==2)//관리자 모드인경우
+        {
+        	session.setAttribute("sessionID", id);
+            msg = "../indexAdmin.jsp";
+        }
         else    // 아이디가 틀릴경우
         {
             msg = "login.jsp?msg=-1";

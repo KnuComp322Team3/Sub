@@ -201,8 +201,10 @@ public class MemberDAO {
 			{
 				dbPW = rs.getString("password"); // 비번을 변수에 넣는다.
 
-				if (dbPW.equals(pw))
+				if (!id.equals("admin") && dbPW.equals(pw))
 					x = 1; // 넘겨받은 비번과 꺼내온 배번 비교. 같으면 인증성공
+				else if (id.equals("admin") && dbPW.equals(pw))
+					x = 2;// 관리자 모드일때
 				else
 					x = 0; // DB의 비밀번호와 입력받은 비밀번호 다름, 인증실패
 
