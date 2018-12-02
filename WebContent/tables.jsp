@@ -196,14 +196,31 @@
                   
       <%
         try {
-
-              		String query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, I.Item_amount, B.Brand_name " + 
-              				"		from ITEM I, BRAND B " +
-              				"		where I.Brand_number = B.Brand_number "+
-              				"		order by Product_number asc";
+        	String category_number="";
+        	String section = (request.getParameter("section") == null) ? "" : request.getParameter("section");
+        	//section = request.getParameter("section");
+        	if(section.equals("삽")) category_number = "010101";	if(section.equals("못")) category_number = "010102";	if(section.equals("열쇠")) category_number = "010103";
+        	if(section.equals("다용도칼")) category_number = "010201";if(section.equals("자석")) category_number = "010202";if(section.equals("필기구")) category_number = "010203";
+        	String query="";
+        	if (!section.equals("")){
+        		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, I.Item_amount, B.Brand_name " + 
+      				"		from ITEM I, BRAND B, CATEGORY C "+
+      				"		where I.Brand_number = B.Brand_number "+
+      				"		AND C.Category_number = I.Category_number " +
+      				" 		AND C.Category_number = ? " +
+      				"		ORDER BY I.Product_number ASC";        		
+        	}
+        	else{
+        		query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, I.Item_amount, B.Brand_name " + 
+          				"		from ITEM I, BRAND B, CATEGORY C "+
+          				"		where I.Brand_number = B.Brand_number "+
+          				"		AND C.Category_number = I.Category_number " +
+          				"		ORDER BY I.Product_number ASC";
+        	}
+       		pstmt = conn.prepareStatement(query);
+            if(!category_number.equals("")) pstmt.setString(1,category_number);
               		
-              		pstmt = conn.prepareStatement(query);
-
+        	
 		rs = pstmt.executeQuery();
 
 		//out.println():print out given text to the current HTML doucment.
