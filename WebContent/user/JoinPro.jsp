@@ -32,7 +32,14 @@
         // insertMember()는 회원 정보를 JSP_MEMBER 테이블에 저장한다.
         dao.insertMember(memberBean);
     %>
+    <script type="text/javascript">
     
+    
+        //버튼 클릭시 회원정보 수정 화면으로 이동
+        function goChangeForm() {
+            location.href="ChangeForm.jsp";
+        }    
+    </script>
     <div id="wrap">
         <br><br>
         <b><font size="5" color="gray">회원가입 정보를 확인하세요.</font></b>
@@ -108,7 +115,7 @@
         </table>
         
         <br>
-        <input type="button" value="확인">
+        <input type="button" value="확인"> <input type="button" value="회원정보 수정" onclick="goChangeForm()">
     </div>
 </body>
 </html>
