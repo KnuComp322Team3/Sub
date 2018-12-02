@@ -26,9 +26,29 @@
 	<%
 		MemberDAO dao = MemberDAO.getInstance();
 
+		String id= request.getParameter("id");
+		 int check = dao.duplicateCheck(id);
+	        
+	        // URL 및 로그인관련 전달 메시지
+	        String msg = "";
+	        
+	        if(check == 1)    // 로그인 성공
+	        { 
+	            // 중복된 아이디가 있을 경우
+	            msg="duplicate.jsp";
+	            response.sendRedirect(msg);
+
+	        }
+	        else    // 중복된 아이디가 없을 경우
+	        {
+	        	dao.insertMember(memberBean);
+	        }
+	         
+	        // sendRedirect(String URL) : 해당 URL로 이동
+	        // URL뒤에 get방식 처럼 데이터를 전달가능
+	        
 		// 회원정보를 담고있는 memberBean을 dao의 insertMember() 메서드로 넘긴다.
 		// insertMember()는 회원 정보를 JSP_MEMBER 테이블에 저장한다.
-		dao.insertMember(memberBean);
 	%>
 	<script type="text/javascript">
 		alert("회원가입 완료");

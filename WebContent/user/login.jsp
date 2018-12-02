@@ -35,7 +35,7 @@
             <div class="form-group">
               <div class="form-label-group">
                 <input type="text" name="id" id="id" class="form-control" placeholder="InputId" required="required" autofocus="autofocus">
-                <label for="inputId">ID</label>
+                <label for="id">ID</label>
               </div>
             </div>
             <div class="form-group">
