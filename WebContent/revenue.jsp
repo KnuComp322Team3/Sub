@@ -92,171 +92,281 @@
 
 	</nav>
 
-	<div id="wrapper">
+	<%
+		String serverIP = "localhost";
+		String portNum = "3306";
+		String url = "jdbc:mysql://" + serverIP + ":" + portNum + "/dbpro?useSSL=false";
+		String user = "knu";
+		String pass = "comp322";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs;
+		Class.forName("com.mysql.jdbc.Driver");
+		conn = DriverManager.getConnection(url, user, pass);
+	%>
+	<div id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item active">재고 부족 상품</li>
+			</ol>
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<i class="fas fa-table"></i> 상품 목록
+				</div>
+				<%
+					try {
+						Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
+						//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
+						//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+						conn = DriverManager.getConnection(url, user, pass);
+						conn.setAutoCommit(false);
+						String query = "";
+						query = "SELECT SUM(A.Item_revenue) "
+								+ "FROM (SELECT IC.Product_number AS Pnum, SUM(IC.Ordered_amount)*IT.Item_price AS Item_revenue "
+								+ " FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S " + "  WHERE IT.Product_number = IC.Product_number "
+								+ "  AND S.Paydate IS NOT NULL " + "  AND S.Transaction_number = IC.Transaction_number "
+								+ "  GROUP BY IC.Product_number)A ";
 
-		<!-- Sidebar -->
-		<ul class="sidebar navbar-nav">
-			<li class="nav-item active"><a class="nav-link"
-				href="indexAdmin.jsp"> <i class="fas fa-fw fa-tachometer-alt"></i>
-					<span>관리자</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link" href="stock.jsp"> <i
-					class="fas fa-fw fa-table"></i> <span>재고관리</span>
-			</a></li>
-		</ul>
+						pstmt = conn.prepareStatement(query);
+						rs = pstmt.executeQuery();
+						rs.next();
+						out.println("<span> 전체매출" + rs.getString(1) + "원 </span>");
+					} catch (ClassNotFoundException | SQLException sqle) {
+						// 오류시 롤백
+						conn.rollback();
 
+						throw new RuntimeException(sqle.getMessage());
+					} finally {
+						// Connection, PreparedStatement를 닫는다.
+						try {
+							if (pstmt != null) {
+								pstmt.close();
+								pstmt = null;
+							}
+							if (conn != null) {
+								conn.close();
+								conn = null;
+							}
+						} catch (Exception e) {
+							throw new RuntimeException(e.getMessage());
+						}
+					}
+				%>
 
-		<%
-			String serverIP = "localhost";
-			String portNum = "3306";
-			String url = "jdbc:mysql://" + serverIP + ":" + portNum + "/dbpro?useSSL=false";
-			String user = "knu";
-			String pass = "comp322";
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs;
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(url, user, pass);
-		%>
-		<div id="content-wrapper">
-			<div class="container-fluid">
-				<!-- Breadcrumbs-->
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item active">재고 부족 상품</li>
-				</ol>
-				<!-- DataTables Example -->
-				<div class="card mb-3">
-					<div class="card-header">
-						<i class="fas fa-table"></i> 상품 목록
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered" id="dataTable" width="100%"
-								cellspacing="0">
-								<thead>
-									<tr>
-										<th>Product Number</th>
-										<th>Item Name</th>
-										<th>Item Spec</th>
-										<th>Item Price</th>
-										<th>재고수량</th>
-										<th>장바구니 수량</th>
-										<th>재고 수량 변경</th>
-									</tr>
-								</thead>
-								<%
-									try {
-										Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
-										//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
-										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
-										conn = DriverManager.getConnection(url, user, pass);
-										conn.setAutoCommit(false);
-										String query = "";
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>기간</th>
+									<th>매출</th>
+								</tr>
+							</thead>
 
-										query = "SELECT IT.product_number, IT.Item_name, IT.Item_spec, IT.Item_price, IT.Item_amount, AA.Amount "
-												+ "FROM ITEM IT, ( "
-												+ "		SELECT ic.Product_number AS Pnum, SUM(ic.Ordered_amount) AS Amount "
-												+ "		FROM INCLUDE ic,SHOPPINGBAG s "
-												+ "		WHERE ic.Transaction_number=s.Transaction_number " + "		AND s.Paydate is NULL "
-												+ "		GROUP BY ic.Product_number " + "		) AA "
-												+ "		WHERE IT.Product_number = AA.Pnum " + "		AND IT.Item_amount < AA.Amount";
+							<%
+								try {
+									Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
+									//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
+									//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+									conn = DriverManager.getConnection(url, user, pass);
+									conn.setAutoCommit(false);
+									String query = "";
+									query = "SELECT DATE_FORMAT(A.paydate,'%Y-%m') m, SUM(A.Item_revenue) " + "FROM "
+											+ "(SELECT IC.Product_number AS Pnum, S.Paydate as paydate, SUM(IC.Ordered_amount)*IT.Item_price AS Item_revenue "
+											+ "  FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S "
+											+ "  WHERE IT.Product_number = IC.Product_number " + "  AND S.Paydate IS NOT NULL "
+											+ "  AND S.Transaction_number = IC.Transaction_number "
+											+ "  GROUP BY IC.Product_number, S.Paydate)A " + "  GROUP BY m";
 
-										pstmt = conn.prepareStatement(query);
+									pstmt = conn.prepareStatement(query);
 
-										rs = pstmt.executeQuery();
+									rs = pstmt.executeQuery();
 
-										//out.println():print out given text to the current HTML doucment.
+									//out.println():print out given text to the current HTML doucment.
 
-										ResultSetMetaData rsmd = rs.getMetaData();
-										int cnt = rsmd.getColumnCount();
-										out.println("<tbody>");
-										while (rs.next()) {
-											out.println("<tr><form class=\"tr\" method=\"GET\" action=\"stock.jsp\" >");
-											out.println("<td><input class=\"badge badge-pill badge-light\" name = \"product_number\" value=\""
-													+ rs.getString(1) + "\"/>" + rs.getString(1) + "</td>");
-											out.println("<td>" + rs.getString(2) + "</td>");
-											out.println("<td>" + rs.getString(3) + "</td>");
-											out.println("<td>" + rs.getString(4) + "</td>");
-											out.println("<td>" + rs.getString(5) + "</td>");
-											out.println("<td>" + rs.getString(6) + "</td>");
-											//수정 버튼
-											out.println("<td>");
-											out.println(
-													"<input class=\"form-control\" type=\"number\" name=\"itemAmount\"  value=\"0\" min=\"0\" max=\"10000000\">");
+									ResultSetMetaData rsmd = rs.getMetaData();
+									int cnt = rsmd.getColumnCount();
 
-											out.println(
-													"<input class=\"btn btn-primary\" type=\"submit\" name=\"stockMethod\" value=\"add\"/>");
-											out.println(
-													"<input class=\"btn btn-primary\" type=\"submit\" name=\"stockMethod\" value=\"sub\"/></td></form>");
-
-											out.println("</tr>");
-										}
-
-										out.println("</tbody>");
-
-										conn.commit();
-									} catch (ClassNotFoundException | SQLException sqle) {
-										// 오류시 롤백
-										conn.rollback();
-
-										throw new RuntimeException(sqle.getMessage());
-									} finally {
-										// Connection, PreparedStatement를 닫는다.
-										try {
-											if (pstmt != null) {
-												pstmt.close();
-												pstmt = null;
-											}
-											if (conn != null) {
-												conn.close();
-												conn = null;
-											}
-										} catch (Exception e) {
-											throw new RuntimeException(e.getMessage());
-										}
+									while (rs.next()) {
+										out.println("<tr>");
+										out.println("<td>" + rs.getString(1) + "</td>");
+										out.println("<td>" + rs.getString(2) + "</td>");
+										out.println("</tr>");
 									}
-								%>
-							</table>
-						</div>
+
+									query = "SELECT A.paydate, SUM(A.Item_revenue) "+
+											"FROM "+
+											"(SELECT IC.Product_number AS Pnum, S.Paydate as paydate, SUM(IC.Ordered_amount)*IT.Item_price AS Item_revenue "+
+											"  FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S "+
+											"  WHERE IT.Product_number = IC.Product_number "+
+											"  AND S.Paydate IS NOT NULL "+
+											"  AND S.Transaction_number = IC.Transaction_number "+
+											"  GROUP BY IC.Product_number, S.Paydate "+
+											")A "+
+											"GROUP BY A.paydate";
+
+									pstmt = conn.prepareStatement(query);
+
+									rs = pstmt.executeQuery();
+
+									//out.println():print out given text to the current HTML doucment.
+
+									rsmd = rs.getMetaData();
+									cnt = rsmd.getColumnCount();
+
+									while (rs.next()) {
+										out.println("<tr>");
+										out.println("<td>" + rs.getString(1) + "</td>");
+										out.println("<td>" + rs.getString(2) + "</td>");
+										out.println("</tr>");
+									}
+
+									out.println("</tbody>");
+
+									conn.commit();
+								} catch (ClassNotFoundException | SQLException sqle) {
+									// 오류시 롤백
+									conn.rollback();
+
+									throw new RuntimeException(sqle.getMessage());
+								} finally {
+									// Connection, PreparedStatement를 닫는다.
+									try {
+										if (pstmt != null) {
+											pstmt.close();
+											pstmt = null;
+										}
+										if (conn != null) {
+											conn.close();
+											conn = null;
+										}
+									} catch (Exception e) {
+										throw new RuntimeException(e.getMessage());
+									}
+								}
+							%>
+						</table>
 					</div>
 				</div>
 			</div>
+		</div>
+						<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>기간</th>
+									<th>매출</th>
+								</tr>
+							</thead>
+
+							<%
+								try {
+									Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
+									//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
+									//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+									conn = DriverManager.getConnection(url, user, pass);
+									conn.setAutoCommit(false);
+									String query = "";
+
+									
+
+									
+									query = "SELECT A.paydate, SUM(A.Item_revenue) "+
+											"FROM "+
+											"(SELECT IC.Product_number AS Pnum, S.Paydate as paydate, SUM(IC.Ordered_amount)*IT.Item_price AS Item_revenue "+
+											"  FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S "+
+											"  WHERE IT.Product_number = IC.Product_number "+
+											"  AND S.Paydate IS NOT NULL "+
+											"  AND S.Transaction_number = IC.Transaction_number "+
+											"  GROUP BY IC.Product_number, S.Paydate "+
+											")A "+
+											"GROUP BY A.paydate";
+
+									pstmt = conn.prepareStatement(query);
+
+									rs = pstmt.executeQuery();
+
+									//out.println():print out given text to the current HTML doucment.
+
+									ResultSetMetaData rsmd = rs.getMetaData();
+									int cnt = rsmd.getColumnCount();
+
+									while (rs.next()) {
+										out.println("<tr>");
+										out.println("<td>" + rs.getString(1) + "</td>");
+										out.println("<td>" + rs.getString(2) + "</td>");
+										out.println("</tr>");
+									}
+
+									out.println("</tbody>");
+
+									conn.commit();
+								} catch (ClassNotFoundException | SQLException sqle) {
+									// 오류시 롤백
+									conn.rollback();
+
+									throw new RuntimeException(sqle.getMessage());
+								} finally {
+									// Connection, PreparedStatement를 닫는다.
+									try {
+										if (pstmt != null) {
+											pstmt.close();
+											pstmt = null;
+										}
+										if (conn != null) {
+											conn.close();
+											conn = null;
+										}
+									} catch (Exception e) {
+										throw new RuntimeException(e.getMessage());
+									}
+								}
+							%>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
+		<!-- /.content-wrapper -->
 
-			<!-- /.content-wrapper -->
 
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
 
-			<!-- Scroll to Top Button-->
-			<a class="scroll-to-top rounded" href="#page-top"> <i
-				class="fas fa-angle-up"></i>
-			</a>
-
-			<!-- Logout Modal-->
-			<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Ready to
-								Leave?</h5>
-							<button class="close" type="button" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">x</span>
-							</button>
-						</div>
-						<div class="modal-body">Select "Logout" below if you are
-							ready to end your current session.</div>
-						<div class="modal-footer">
-							<button class="btn btn-secondary" type="button"
-								data-dismiss="modal">취소</button>
-							<a class="btn btn-primary" href="/Subject/user/logout.jsp">로그아웃</a>
-						</div>
+		<!-- Logout Modal-->
+		<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Ready to
+							Leave?</h5>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">x</span>
+						</button>
+					</div>
+					<div class="modal-body">Select "Logout" below if you are
+						ready to end your current session.</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">취소</button>
+						<a class="btn btn-primary" href="/Subject/user/logout.jsp">로그아웃</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 
 	<!-- Bootstrap core JavaScript-->
 	<script src="vendor/jquery/jquery.min.js"></script>
