@@ -66,7 +66,7 @@
 				<div class="dropdown-menu dropdown-menu-right"
 					aria-labelledby="userDropdown">
 					<a class="dropdown-item" href="/Subject/user/change.jsp">회원정보
-						수정</a>
+						수정</a><a class="dropdown-item" href="transactions.jsp">구매내역</a>
 					<%
 						session.getAttribute("sessionID");
 					%>
