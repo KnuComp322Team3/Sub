@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ page language="java" import="java.text.*,java.sql.*"%>
+<%@ page language="java"
+	import="java.text.*,java.util.Date,java.sql.SQLException,java.sql.DriverManager,java.sql.Connection,java.sql.ResultSet,java.sql.PreparedStatement"%>
 <html>
 
 <head>
@@ -150,17 +151,6 @@
 						<div class="table-responsive">
 							<table class="table table-bordered" id="dataTable" width="100%"
 								cellspacing="0">
-								<thead>
-									<tr>
-										<th>Product Number</th>
-										<th>Item Name</th>
-										<th>Item Spec</th>
-										<th>Item Price</th>
-										<th>Ordered Amount</th>
-										<th>Brand</th>
-										<th>주문 수량 변경</th>
-									</tr>
-								</thead>
 								<%
 									String serverIP = "localhost";
 									String portNum = "3306";
@@ -180,53 +170,42 @@
 										conn.setAutoCommit(false);
 										String query = "";
 
-										String amountMethod = (request.getParameter("amountMethod") == null) ? ""
-												: request.getParameter("amountMethod");
+										String buy = (request.getParameter("buy") == null) ? "" : request.getParameter("buy");
 
-										if (!amountMethod.equals("")) {
-											pstmt = conn.prepareStatement(
-													"SELECT S.Transaction_number FROM SHOPPINGBAG S WHERE S.Id = ? AND S.Paydate IS NULL");
+										if (!buy.equals("")) {
+											pstmt = conn.prepareStatement("SELECT S.Transaction_number, IC.Product_number, IC.Ordered_amount "
+													+ "FROM SHOPPINGBAG S, INCLUDE IC " + "WHERE S.Id = ? "
+													+ "AND S.Transaction_number = IC.Transaction_number" + "AND S.Paydate IS NULL");
 											pstmt.setString(1, id);
+
 											rs = pstmt.executeQuery();
 											//conn.commit();
 											String transaction_number = (rs.next() == false) ? "" : rs.getString(1);
-											if (!transaction_number.equals("")) {
-												pstmt = conn.prepareStatement("SELECT I.Product_number " + "FROM INCLUDE I "
-														+ "WHERE I.Transaction_number = ? " + "AND I.Product_number = ? ");
-												pstmt.setString(1, transaction_number);
-												pstmt.setString(2, request.getParameter("product_number"));
-												rs = pstmt.executeQuery();
-												//conn.commit();
+											pstmt = conn.prepareStatement("update ITEM set Item_amount=Item_amount-? WHERE Product_number=?");
+											while (rs.next()) {
+												pstmt.setString(1, rs.getString(1));
+												pstmt.setString(2, rs.getString(2));
+												pstmt.executeUpdate();
 											}
-											if (rs.next()) {
-												//이 물품이 장바구니에 있을때
-												if (Integer.parseInt(request.getParameter("orderAmount")) != 0) {
-													pstmt = conn.prepareStatement(
-															"update INCLUDE set Ordered_amount=? WHERE Transaction_number=? AND Product_number=?");
-													pstmt.setString(1, request.getParameter("orderAmount"));
-													pstmt.setString(2, transaction_number);
-													pstmt.setString(3, request.getParameter("product_number"));
-
-												} else {
-													pstmt = conn.prepareStatement(
-															"delete from INCLUDE where Product_number = ? and Transaction_number = ?");
-													pstmt.setString(1, request.getParameter("product_number"));
-													pstmt.setString(2, transaction_number);
-												}
-											} else {
-												//이 물품이 장바구니에 없을때				        
-												pstmt = conn.prepareStatement(
-														"insert into INCLUDE (Transaction_number, Product_number, Id, Ordered_amount) values (?,?,?,?)");
-												pstmt.setString(1, transaction_number);
-												pstmt.setString(2, request.getParameter("product_number"));
-												pstmt.setString(3, id);
-												pstmt.setString(4, request.getParameter("orderAmount"));
-											}
-											pstmt.executeUpdate();
 											//conn.commit();
+											Date today = new Date();
+											SimpleDateFormat time = new SimpleDateFormat("yyyy-mm-dd");
+											String Paydate = time.format(today);
+											pstmt = conn.prepareStatement("update INCLUDE set Paydate=? WHERE Transaction_number=?");
+											pstmt.setString(1, Paydate);
+											pstmt.setString(2, transaction_number);
+											pstmt.executeUpdate();
 
+											pstmt = conn.prepareStatement("SELECT COUNT(S.Transaction_number)" + "FROM SHOPPINGBAG S ");
+											rs = pstmt.executeQuery();
+
+											pstmt = conn.prepareStatement("insert into INCLUDE (Transaction_number, Id) values (?,?)");
+											pstmt.setString(1, "T" + rs.getString(1));
+											pstmt.setString(2, id);
+											pstmt.executeUpdate();
+											conn.commit();
 										}
-										conn.commit();
+
 									} catch (ClassNotFoundException | SQLException sqle) {
 										// 오류시 롤백
 										conn.rollback();
@@ -246,7 +225,19 @@
 											throw new RuntimeException(e.getMessage());
 										}
 									}
-
+								%>
+								<thead>
+									<tr>
+										<th>거래번호</th>
+										<th>거래일</th>
+										<th>물품코드</th>
+										<th>물품명</th>
+										<th>물품가격</th>
+										<th>주문수</th>
+										<th>구매액</th>
+									</tr>
+								</thead>
+								<%
 									try {
 										Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 										//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
@@ -255,13 +246,14 @@
 										conn.setAutoCommit(false);
 										String query = "";
 
-										query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, IC.Ordered_amount,B.Brand_name "
-												+ "		from ITEM I, BRAND B, SHOPPINGBAG S, INCLUDE IC "
-												+ "		where I.Brand_number = B.Brand_number "
-												+ " 		AND IC.Product_number = I.Product_number"
-												+ "		AND IC.Transaction_number = S.Transaction_number " + " 		AND S.Id = ? "
-												+ " 		AND S.Paydate IS NULL " + "		ORDER BY I.Product_number ASC ";
-
+										query = "SELECT IC.Transaction_number, S.Paydate, IC.Product_number, IT.Item_name, IT.Item_price, IC.Ordered_amount, SUM(IC.Ordered_amount)*IT.Item_price "+ 
+												"FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S   "+
+												"WHERE S.Transaction_number = IC.Transaction_number "+  
+												"AND S.Paydate IS NOT NULL   "+
+												"AND S.Id = ?  "+
+												"AND IC.Product_number = IT.Product_number "+  
+												"GROUP BY  IC.Transaction_number, IC.Product_number, IT.Item_name, IC.Ordered_amount, IT.Item_price "+
+												"ORDER BY Paydate asc";
 										pstmt = conn.prepareStatement(query);
 										if (!id.equals(""))
 											pstmt.setString(1, id);
@@ -269,25 +261,20 @@
 
 										//out.println():print out given text to the current HTML doucment.
 
-										ResultSetMetaData rsmd = rs.getMetaData();
-										int cnt = rsmd.getColumnCount();
+										//ResultSetMetaData rsmd = rs.getMetaData();
+										//int cnt = rsmd.getColumnCount();
 										out.println("<tbody>");
 										while (rs.next()) {
-											out.println("<tr><form class=\"tr\" method=\"GET\" action=\"shoppingbag.jsp\" >");
-											out.println("<td><input type=\"text\" style=\"width:0px\" name = \"product_number\" value=\"" + rs.getString(1) + "\"/>"+rs.getString(1)+"</td>");
+											out.println("<tr>");
+											out.println("<td>" + rs.getString(1) + "</td>");
 											out.println("<td>" + rs.getString(2) + "</td>");
 											out.println("<td>" + rs.getString(3) + "</td>");
 											out.println("<td>" + rs.getString(4) + "</td>");
 											out.println("<td>" + rs.getString(5) + "</td>");
 											out.println("<td>" + rs.getString(6) + "</td>");
+											out.println("<td>" + rs.getString(7) + "</td>");
 											//수정 버튼
-											out.println("<td>");
-								%>
-								
-									<input class="form-control" type="number" name="orderAmount" min="0" max="10000000">
-								
-								<%
-									out.println("<input class=\"btn btn-primary\" type=\"submit\" name=\"amountMethod\" value=\"modify\"/></form></td>");
+											
 											out.println("</tr>");
 										}
 										out.println("</tbody>");
@@ -314,15 +301,18 @@
 										}
 									}
 								%>
+
+
 							</table>
 						</div>
 					</div>
 					<div class="card-footer small text-muted">Updated yesterday
 						at 11:59 PM</div>
 				</div>
-				<form method="GET" action="transaction.jsp">
-					<input class="btn btn-primary" type="submit" name="buy" value="buy"></form>
 
+				<p class="small text-center text-muted my-5">
+					<em>More table examples coming soon...</em>
+				</p>
 
 			</div>
 			<!-- /.container-fluid -->
