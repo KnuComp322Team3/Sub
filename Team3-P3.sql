@@ -8,7 +8,7 @@ DROP TABLE ITEM CASCADE;
 DROP TABLE SHIPPINGCOMPANY CASCADE;
 DROP TABLE SHOPPINGBAG CASCADE;
 DROP TABLE SUPPLIER CASCADE;
-DROP TABLE INCLUDE CASCADE;1
+DROP TABLE INCLUDE CASCADE;
 SET foreign_key_checks = 1;
 
 CREATE TABLE BRAND
@@ -273,7 +273,11 @@ INSERT INTO BRAND VALUES('B0022', '3M 문구', 'S0001');
 INSERT INTO ITEM VALUES('C157-3105','수정테이프','1652 디스펜서',2000,2000,'B0022','010203');
 INSERT INTO ITEM VALUES('C157-2966','스카치테이프','522 다용도',1200,1220,'B0022','010203');
 
+#관리자
+INSERT INTO CUSTOMER VALUES ('admin','admin','admin','admin',NULL,NULL,NULL,NULL,NULL,1);
 #고객
+
+
 INSERT INTO CUSTOMER VALUES ('ERUYUEOOEYWKNTJABCCJ','QXMFXSNDE','Jeju-261','010-0997-5575',NULL,NULL,NULL,NULL,NULL,1);
 INSERT INTO CUSTOMER VALUES ('GUZADZBHDMOUPSZWTWSB','ZYYTEMIIK','Seoul-667','010-1372-9713',NULL,NULL,NULL,NULL,NULL,2);
 INSERT INTO CUSTOMER VALUES ('INTBMRWLMALECLXYPZEB','HPOMORUTD','Busan-228','010-2402-2026',NULL,NULL,NULL,NULL,NULL,3);
@@ -5246,6 +5250,17 @@ INSERT INTO INCLUDE VALUES ('T00000305','C169-3180','ZYYTEMIIK',6);
 INSERT INTO INCLUDE VALUES ('T00000305','C169-4790','ZYYTEMIIK',1);
 INSERT INTO INCLUDE VALUES ('T00000477','C132-1070','ZYYTEMIIK',5);
 
+#인덱스 삽입
+create index idx_sec_cnum on CATEGORY (Section,Category_number); 
+create index idx_id_snum on CUSTOMER (Id,Shipcom_number);
+create index idx_num_name on BRAND (Brand_number,Brand_name);
+create index idx_name_number on SHIPPINGCOMPANY (Shipcom_name, Shipcom_number);
+create index idx_catnum_pnum on ITEM (Category_number,Product_number);
+create index idx_id_pdate on SHOPPINGBAG (Id,Paydate);
+create index idx_name_number on SUPPLIER (Supplier_name,Supplier_number);
+create index idx_tnum_pnum on INCLUDE (Transaction_number,Product_number);
+
+
 #1
 
 SELECT Item_name, Product_number, COUNT(Product_number)
@@ -5366,6 +5381,10 @@ GROUP BY CT.Division,C.Type,CT.Division
 ORDER BY NUM DESC limit 0,1;
 
 #9
+SELECT I
+FROM SHOPPINGBAG S,INCLUDE IC, ITEM IT
+WHERE S.Paydate IS NOT NULL
+
 
 SELECT ic.Product_number,SUM(ic.Ordered_amount) AS Amount
 FROM INCLUDE ic,SHOPPINGBAG s
