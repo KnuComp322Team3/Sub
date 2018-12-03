@@ -48,13 +48,12 @@
 			환영합니다</a>
 
 		<button class="btn btn-link btn-sm text-white order-1 order-sm-0"
-			id="sidebarToggle" href="#">
-		</button>
+			id="sidebarToggle" href="#"></button>
 
 		<!-- Navbar Search -->
 		<form
 			class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-			
+
 		</form>
 
 		<!-- Navbar -->
@@ -68,8 +67,7 @@
 				<div class="dropdown-menu dropdown-menu-right"
 					aria-labelledby="userDropdown">
 					<a class="dropdown-item" href="/Subject/user/change.jsp">회원정보
-						수정</a>
-						<a class="dropdown-item" href="transactions.jsp">구매내역</a>
+						수정</a> <a class="dropdown-item" href="transactions.jsp">구매내역</a>
 					<%
 						session.getAttribute("sessionID");
 					%>
@@ -135,18 +133,17 @@
 										if (!buy.equals("")) {
 											pstmt = conn.prepareStatement("SELECT S.Transaction_number, IC.Product_number, IC.Ordered_amount "
 													+ "FROM SHOPPINGBAG S, INCLUDE IC " + "WHERE S.Id = ? "
-													+ "AND S.Transaction_number = IC.Transaction_number " + 
-													" AND S.Paydate IS NULL");
+													+ "AND S.Transaction_number = IC.Transaction_number " + " AND S.Paydate IS NULL");
 											pstmt.setString(1, id);
 
 											rs = pstmt.executeQuery();
 											//conn.commit();
-											
+
 											String transaction_number = (rs.next() == false) ? "" : rs.getString(1);
 											System.out.println(rs.getString(3));
 											System.out.println(rs.getString(2));
 											rs.beforeFirst();
-											
+
 											pstmt = conn.prepareStatement("update ITEM set Item_amount=Item_amount-? WHERE Product_number=? ");
 											while (rs.next()) {
 												System.out.println(rs.getString(3));
@@ -155,35 +152,34 @@
 												pstmt.setString(2, rs.getString(2));
 												pstmt.executeUpdate();
 											}
-											
+
 											Date today = new Date();
 											SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
 											String paydate = time.format(today);
 											System.out.println(paydate);
 											//String paydate = "2018-12-01";
-										    
-										    pstmt = conn.prepareStatement("update SHOPPINGBAG set Paydate=? WHERE Transaction_number=?");
+
+											pstmt = conn.prepareStatement("update SHOPPINGBAG set Paydate=? WHERE Transaction_number=?");
 											pstmt.setString(1, paydate);
 											pstmt.setString(2, transaction_number);
 											pstmt.executeUpdate();
-											
+
 											pstmt = conn.prepareStatement("SELECT COUNT(S.Transaction_number) FROM SHOPPINGBAG S ");
 											rs = pstmt.executeQuery();
-											if(rs.next()){
-												pstmt = conn.prepareStatement("insert into SHOPPINGBAG (Transaction_number, Paydate,Id) values (?,NULL,?)");
-												pstmt.setString(1, "T" + (Integer.parseInt(rs.getString(1))+1));
+											if (rs.next()) {
+												pstmt = conn.prepareStatement(
+														"insert into SHOPPINGBAG (Transaction_number, Paydate,Id) values (?,NULL,?)");
+												pstmt.setString(1, "T" + (Integer.parseInt(rs.getString(1)) + 1));
 												pstmt.setString(2, id);
 												pstmt.executeUpdate();
 											}
-											
-											conn.commit();
-											
 										}
-
+										conn.commit();
 									} catch (ClassNotFoundException | SQLException sqle) {
 										// 오류시 롤백
 										conn.rollback();
-										out.println("<script type=\"text/javascript\">alert(\"구매 실패 - 재고 등을 문의해주세요\");location.href = \"./shoppingbag.jsp\";</script>");
+										out.println(
+												"<script type=\"text/javascript\">alert(\"구매 실패 - 재고 등을 문의해주세요\");location.href = \"./shoppingbag.jsp\";</script>");
 									} finally {
 										// Connection, PreparedStatement를 닫는다.
 										try {
@@ -221,14 +217,12 @@
 										conn.setAutoCommit(false);
 										String query = "";
 
-										query = "SELECT IC.Transaction_number, S.Paydate, IC.Product_number, IT.Item_name, IT.Item_price, IC.Ordered_amount, SUM(IC.Ordered_amount)*IT.Item_price "+ 
-												"FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S   "+
-												"WHERE S.Transaction_number = IC.Transaction_number "+  
-												"AND S.Paydate IS NOT NULL   "+
-												"AND S.Id = ?  "+
-												"AND IC.Product_number = IT.Product_number "+  
-												"GROUP BY  IC.Transaction_number, IC.Product_number, IT.Item_name, IC.Ordered_amount, IT.Item_price "+
-												"ORDER BY Paydate asc";
+										query = "SELECT IC.Transaction_number, S.Paydate, IC.Product_number, IT.Item_name, IT.Item_price, IC.Ordered_amount, SUM(IC.Ordered_amount)*IT.Item_price "
+												+ "FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S   "
+												+ "WHERE S.Transaction_number = IC.Transaction_number " + "AND S.Paydate IS NOT NULL   "
+												+ "AND S.Id = ?  " + "AND IC.Product_number = IT.Product_number "
+												+ "GROUP BY  IC.Transaction_number, IC.Product_number, IT.Item_name, IC.Ordered_amount, IT.Item_price "
+												+ "ORDER BY Paydate asc";
 										pstmt = conn.prepareStatement(query);
 										if (!id.equals(""))
 											pstmt.setString(1, id);
@@ -249,7 +243,7 @@
 											out.println("<td>" + rs.getString(6) + "</td>");
 											out.println("<td>" + rs.getString(7) + "</td>");
 											//수정 버튼
-											
+
 											out.println("</tr>");
 										}
 										out.println("</tbody>");
