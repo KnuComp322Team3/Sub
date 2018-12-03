@@ -124,7 +124,7 @@
 			</a>
 				<div class="dropdown-menu" aria-labelledby="pagesDropdown">
 					<h6 class="dropdown-header">Login Screens:</h6>
-					<a class="dropdown-item" href="login.jsp">Login</a> <a
+					<a class="dropdown-item" href="/Subject/user/login.jsp">Login</a> <a
 						class="dropdown-item" href="register.jsp">Register</a> <a
 						class="dropdown-item" href="forgot-password.jsp">Forgot
 						Password</a>
@@ -361,7 +361,7 @@
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button"
 						data-dismiss="modal">Cancel</button>
-					<a class="btn btn-primary" href="login.jsp">Logout</a>
+					<a class="btn btn-primary" href="/Subject/user/login.jsp">Logout</a>
 				</div>
 			</div>
 		</div>
