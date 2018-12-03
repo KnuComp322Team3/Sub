@@ -12,7 +12,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>COMP322-Team3</title>
+<title>index</title>
 
 <!-- Bootstrap core CSS-->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -45,12 +45,11 @@
 
 	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-		<a class="navbar-brand mr-1" href="index.jsp">COMP322-Team3</a>
+		<a class="navbar-brand mr-1" href="index.jsp"><%=session.getAttribute("sessionID")%>님
+			환영합니다</a>
 
 		<button class="btn btn-link btn-sm text-white order-1 order-sm-0"
-			id="sidebarToggle" href="#">
-			<i class="fas fa-bars"></i>
-		</button>
+			id="sidebarToggle" href="#"></button>
 
 		<!-- Navbar Search -->
 		<form
@@ -94,29 +93,10 @@
 			<li class="nav-item active"><a class="nav-link" href="index.jsp">
 					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&카테고리</span>
 			</a></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="pagesDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-fw fa-folder"></i> <span>장바구니</span>
-			</a>
-				<div class="dropdown-menu" aria-labelledby="pagesDropdown">
-					<h6 class="dropdown-header">Login Screens:</h6>
-					<a class="dropdown-item" href="login.jsp">Login</a> <a
-						class="dropdown-item" href="register.jsp">Register</a> <a
-						class="dropdown-item" href="forgot-password.jsp">Forgot
-						Password</a>
-					<div class="dropdown-divider"></div>
-					<h6 class="dropdown-header">Other Pages:</h6>
-					<a class="dropdown-item" href="404.jsp">404 Page</a> <a
-						class="dropdown-item" href="blank.jsp">Blank Page</a>
-				</div></li>
-			<!--  
-        <li class="nav-item">
-          <a class="nav-link" href="charts.jsp">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-        </li>
-        -->
+			<li class="nav-item"><a class="nav-link" href="shoppingbag.jsp">
+					<i class="fas fa-fw fa-folder"></i> <span>장바구니</span>
+			</a></li>
+
 			<li class="nav-item"><a class="nav-link" href="tables.jsp">
 					<i class="fas fa-fw fa-table"></i> <span>상품 목록</span>
 			</a></li>
@@ -221,38 +201,7 @@
 
 
 				<!-- Breadcrumbs-->
-				<ol class="breadcrumb">
-					<!--  <li class="breadcrumb-item">
-              <a href="index.jsp">Home</a>
-            </li> -->
-					<div>
-						<li >Category</li>
-						<br><br>
-					</div>
-
-					<form action="tables.jsp" method="GET">
-						<div class="btn-group dropright">
-							<button type="button"
-								class="btn btn-secondary btn-lg dropdown-toggle"
-								data-toggle="dropdown" aria-haspopup="true"
-								aria-expanded="false">철물,원예,사무용품</button>
-							<div class="dropdown-menu">
-								<!-- Dropdown menu links -->
-								<h2 class="dropdown-header">철물(중분류)</h2>
-								<input type="submit" class="dropdown-item" name="section"
-									value="삽"> <input type="submit" class="dropdown-item"
-									name="section" value="못"> <input type="submit"
-									class="dropdown-item" name="section" value="열쇠">
-								<h2 class="dropdown-header">사무,레져(중분류)</h2>
-								<input type="submit" class="dropdown-item" name="section"
-									value="다용도칼"> <input type="submit"
-									class="dropdown-item" name="section" value="자석"> <input
-									type="submit" class="dropdown-item" name="section" value="필기구">
-							</div>
-						</div>
-					</form>
-
-				</ol>
+				
 				<!-- Default dropright button -->
 				<form action="tables.jsp" method="GET">
 					<div class="btn-group dropright">
