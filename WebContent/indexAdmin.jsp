@@ -87,10 +87,22 @@
 		<ul class="sidebar navbar-nav">
 			<li class="nav-item active"><a class="nav-link"
 				href="indexAdmin.jsp"> <i class="fas fa-fw fa-tachometer-alt"></i>
-					<span>관리자</span>
+					<span>부족재고 목록</span>
 			</a></li>
 			<li class="nav-item"><a class="nav-link" href="stock.jsp"> <i
 					class="fas fa-fw fa-table"></i> <span>재고관리</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="shipping.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>배송내역</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenue.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>전체매출</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenuem.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>월별매출</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenued.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>일별매출</span>
 			</a></li>
 		</ul>
 
