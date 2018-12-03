@@ -195,7 +195,7 @@
 												pstmt.setString(2, rs.getString(2));
 												pstmt.executeUpdate();
 											}
-											//conn.commit();
+											
 											Date today = new Date();
 											SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
 											String paydate = time.format(today);
@@ -216,7 +216,7 @@
 												pstmt.executeUpdate();
 											}
 											
-											conn.commit();
+											//conn.commit();
 											
 										}
 

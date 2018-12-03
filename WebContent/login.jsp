@@ -33,7 +33,7 @@
                 onsubmit="return checkValue()">
             <div class="form-group">
               <div class="form-label-group">
-                <input type="text" name="inputid" id="inputid" class="form-control" placeholder="InputId" required="required" autofocus="autofocus">
+                <input type="text" name="inputid" id="inputId" class="form-control" placeholder="InputId" required="required" autofocus="autofocus">
                 <label for="inputId">ID</label>
               </div>
             </div>
