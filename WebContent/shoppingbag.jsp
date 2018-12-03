@@ -135,6 +135,7 @@
 										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 										conn = DriverManager.getConnection(url, user, pass);
 										conn.setAutoCommit(false);
+										conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 										String query = "";
 
 										String amountMethod = (request.getParameter("amountMethod") == null) ? ""
@@ -211,6 +212,7 @@
 										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 										conn = DriverManager.getConnection(url, user, pass);
 										conn.setAutoCommit(false);
+										conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 										String query = "";
 
 										query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, IC.Ordered_amount,B.Brand_name "

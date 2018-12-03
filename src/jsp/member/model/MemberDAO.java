@@ -54,7 +54,7 @@ public class MemberDAO {
 			// 커넥션을 가져온다.
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, pass);
-
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 			// 자동 커밋을 false로 한다.
 			conn.setAutoCommit(false);
 
@@ -140,7 +140,7 @@ public class MemberDAO {
 			// 커넥션을 가져온다.
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, pass);
-
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 			// 자동 커밋을 false로 한다.
 			conn.setAutoCommit(false);
 

@@ -140,12 +140,13 @@
 										ResultSet rs;
 										Class.forName("com.mysql.jdbc.Driver");
 										conn = DriverManager.getConnection(url, user, pass);
-
+										
 										try {
 											Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 											//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
 											//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 											conn = DriverManager.getConnection(url, user, pass);
+											conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 											conn.setAutoCommit(false);
 											String query = "";
 											query = "SELECT it.Item_name, it.Product_number, COUNT(ic.Product_number) AS NumberOfOrder "

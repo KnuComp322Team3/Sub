@@ -36,7 +36,7 @@
 
 	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-		<a class="navbar-brand mr-1" href="index.jsp"><%=session.getAttribute("sessionID") %>님 환영합니다</a>
+		<a class="navbar-brand mr-1" href="indexAdmin.jsp">관리자</a>
 
 		<button class="btn btn-link btn-sm text-white order-1 order-sm-0"
 			id="sidebarToggle" href="#">
@@ -61,7 +61,7 @@
 				<div class="dropdown-menu dropdown-menu-right"
 					aria-labelledby="userDropdown">
 					<a class="dropdown-item" href="/Subject/user/change.jsp">회원정보
-						수정</a><a class="dropdown-item" href="stock.jsp">구매내역</a>
+						수정</a>
 					<%
 						session.getAttribute("sessionID");
 					%>
@@ -77,15 +77,24 @@
 
 		<!-- Sidebar -->
 		<ul class="sidebar navbar-nav">
-			<li class="nav-item active"><a class="nav-link" href="index.jsp">
-					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&카테고리</span>
+			<li class="nav-item active"><a class="nav-link"
+				href="indexAdmin.jsp"> <i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>부족재고 목록</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="shoppingbag.jsp">
-					<i class="fas fa-fw fa-folder"></i> <span>장바구니</span>
+			<li class="nav-item"><a class="nav-link" href="stock.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>재고관리</span>
 			</a></li>
-
-			<li class="nav-item"><a class="nav-link" href="tables.jsp">
-					<i class="fas fa-fw fa-table"></i> <span>상품 목록</span>
+			<li class="nav-item"><a class="nav-link" href="shipping.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>배송내역</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenue.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>전체매출</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenuem.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>월별매출</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="revenued.jsp"> <i
+					class="fas fa-fw fa-table"></i> <span>일별매출</span>
 			</a></li>
 		</ul>
 
@@ -106,7 +115,7 @@
 				<!-- DataTables Example -->
 				<div class="card mb-3">
 					<div class="card-header">
-						<i class="fas fa-table"></i> 상품목록
+						<i class="fas fa-table"></i> 월별매출
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -114,12 +123,8 @@
 								cellspacing="0">
 								<thead>
 									<tr>
-										<th>Product Number</th>
-										<th>Item Name</th>
-										<th>Item Spec</th>
-										<th>Item Price</th>
-										<th>Brand</th>
-										<th>상세보기</th>
+										<th>기간</th>
+										<th>매출액</th>
 									</tr>
 								</thead>
 								<%
@@ -139,38 +144,19 @@
 										//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
 										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
 										conn = DriverManager.getConnection(url, user, pass);
+										conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 										conn.setAutoCommit(false);
-										String category_number = "";
-										String section = (request.getParameter("section") == null) ? "" : request.getParameter("section");
-										//section = request.getParameter("section");
-										if (section.equals("삽"))
-											category_number = "010101";
-										if (section.equals("못"))
-											category_number = "010102";
-										if (section.equals("열쇠"))
-											category_number = "010103";
-										if (section.equals("다용도칼"))
-											category_number = "010201";
-										if (section.equals("자석"))
-											category_number = "010202";
-										if (section.equals("필기구"))
-											category_number = "010203";
+										
 										String query = "";
 
-										if (!section.equals("")) {
-											query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name "
-													+ "		from ITEM I, BRAND B, CATEGORY C " + "		where I.Brand_number = B.Brand_number "
-													+ "		AND C.Category_number = I.Category_number " + " 		AND C.Category_number = ? "
-													+ "		ORDER BY I.Product_number ASC";
-										} else {
-											query = "select I.Product_number,I.Item_name,I.Item_spec, I.Item_price, B.Brand_name "
-													+ "		from ITEM I, BRAND B, CATEGORY C " + "		where I.Brand_number = B.Brand_number "
-													+ "		AND C.Category_number = I.Category_number " + "		ORDER BY I.Product_number ASC";
-										}
+										query = "SELECT DATE_FORMAT(A.paydate,'%Y-%m') m, SUM(A.Item_revenue) " + "FROM "
+												+ "(SELECT IC.Product_number AS Pnum, S.Paydate as paydate, SUM(IC.Ordered_amount)*IT.Item_price AS Item_revenue "
+												+ "  FROM INCLUDE IC, ITEM IT, SHOPPINGBAG S "
+												+ "  WHERE IT.Product_number = IC.Product_number " + "  AND S.Paydate IS NOT NULL "
+												+ "  AND S.Transaction_number = IC.Transaction_number "
+												+ "  GROUP BY IC.Product_number, S.Paydate)A " + "  GROUP BY m";
 
 										pstmt = conn.prepareStatement(query);
-										if (!category_number.equals(""))
-											pstmt.setString(1, category_number);
 										rs = pstmt.executeQuery();
 
 										//out.println():print out given text to the current HTML doucment.
@@ -182,12 +168,6 @@
 											out.println("<tr>");
 											out.println("<td>" + rs.getString(1) + "</td>");
 											out.println("<td>" + rs.getString(2) + "</td>");
-											out.println("<td>" + rs.getString(3) + "</td>");
-											out.println("<td>" + rs.getString(4) + "</td>");
-											out.println("<td>" + rs.getString(5) + "</td>");
-											out.println(
-													"<td><form class=\"td\" method=\"GET\" action=\"iteminfo.jsp\" > <input type=\"submit\" name=\"product_number\" value=\""
-															+ rs.getString(1) + "\"/></form></td>");
 											out.println("</tr>");
 										}
 										out.println("</tbody>");

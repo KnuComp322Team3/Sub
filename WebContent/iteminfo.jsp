@@ -102,7 +102,9 @@
 				Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
 				//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
 				//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
+				
 				conn = DriverManager.getConnection(url, user, pass);
+				conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 				conn.setAutoCommit(false);
 				
 			 	product_number = (request.getParameter("product_number") == null) ? "" : request.getParameter("product_number");
