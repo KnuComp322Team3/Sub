@@ -82,13 +82,17 @@ public class MemberDAO {
 			// 완료시 커밋
 			conn.commit();
 			
-			Date today = new Date();
+			/*Date today = new Date();
 			SimpleDateFormat  time= new SimpleDateFormat("hh:mm:ss");
-			String Transcation_number=time.format(today)+member.getId().charAt(0);
+			String Transcation_number=time.format(today)+member.getId().charAt(0);*/
 
+			pstmt = conn.prepareStatement("SELECT COUNT(S.Transaction_number) FROM SHOPPINGBAG S ");
+			rs = pstmt.executeQuery();
 			
+			rs.next();
 			pstmt = conn.prepareStatement("insert into SHOPPINGBAG (Transaction_number,Id) values (?,?)");
-			pstmt.setString(1, Transcation_number);
+			//pstmt.setString(1, Transcation_number);
+			pstmt.setString(1, "T" + (Integer.parseInt(rs.getString(1))+1));
 			pstmt.setString(2, member.getId());
 
 

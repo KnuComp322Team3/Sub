@@ -320,7 +320,7 @@
 					<div class="card-footer small text-muted">Updated yesterday
 						at 11:59 PM</div>
 				</div>
-				<form method="GET" action="transaction.jsp">
+				<form method="GET" action="transactions.jsp">
 					<input class="btn btn-primary" type="submit" name="buy" value="buy"></form>
 
 

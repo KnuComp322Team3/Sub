@@ -175,41 +175,55 @@
 										if (!buy.equals("")) {
 											pstmt = conn.prepareStatement("SELECT S.Transaction_number, IC.Product_number, IC.Ordered_amount "
 													+ "FROM SHOPPINGBAG S, INCLUDE IC " + "WHERE S.Id = ? "
-													+ "AND S.Transaction_number = IC.Transaction_number" + "AND S.Paydate IS NULL");
+													+ "AND S.Transaction_number = IC.Transaction_number " + 
+													" AND S.Paydate IS NULL");
 											pstmt.setString(1, id);
 
 											rs = pstmt.executeQuery();
 											//conn.commit();
+											
 											String transaction_number = (rs.next() == false) ? "" : rs.getString(1);
-											pstmt = conn.prepareStatement("update ITEM set Item_amount=Item_amount-? WHERE Product_number=?");
+											System.out.println(rs.getString(3));
+											System.out.println(rs.getString(2));
+											rs.beforeFirst();
+											
+											pstmt = conn.prepareStatement("update ITEM set Item_amount=Item_amount-? WHERE Product_number=? ");
 											while (rs.next()) {
-												pstmt.setString(1, rs.getString(1));
+												System.out.println(rs.getString(3));
+												System.out.println(rs.getString(2));
+												pstmt.setString(1, rs.getString(3));
 												pstmt.setString(2, rs.getString(2));
 												pstmt.executeUpdate();
 											}
 											//conn.commit();
 											Date today = new Date();
-											SimpleDateFormat time = new SimpleDateFormat("yyyy-mm-dd");
-											String Paydate = time.format(today);
-											pstmt = conn.prepareStatement("update INCLUDE set Paydate=? WHERE Transaction_number=?");
-											pstmt.setString(1, Paydate);
+											SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
+											String paydate = time.format(today);
+											System.out.println(paydate);
+											//String paydate = "2018-12-01";
+										    
+										    pstmt = conn.prepareStatement("update SHOPPINGBAG set Paydate=? WHERE Transaction_number=?");
+											pstmt.setString(1, paydate);
 											pstmt.setString(2, transaction_number);
 											pstmt.executeUpdate();
-
-											pstmt = conn.prepareStatement("SELECT COUNT(S.Transaction_number)" + "FROM SHOPPINGBAG S ");
+											
+											pstmt = conn.prepareStatement("SELECT COUNT(S.Transaction_number) FROM SHOPPINGBAG S ");
 											rs = pstmt.executeQuery();
-
-											pstmt = conn.prepareStatement("insert into INCLUDE (Transaction_number, Id) values (?,?)");
-											pstmt.setString(1, "T" + rs.getString(1));
-											pstmt.setString(2, id);
-											pstmt.executeUpdate();
+											if(rs.next()){
+												pstmt = conn.prepareStatement("insert into SHOPPINGBAG (Transaction_number, Paydate,Id) values (?,NULL,?)");
+												pstmt.setString(1, "T" + (Integer.parseInt(rs.getString(1))+1));
+												pstmt.setString(2, id);
+												pstmt.executeUpdate();
+											}
+											
 											conn.commit();
+											
 										}
 
 									} catch (ClassNotFoundException | SQLException sqle) {
 										// 오류시 롤백
 										conn.rollback();
-										throw new RuntimeException(sqle.getMessage());
+										out.println("<script type=\"text/javascript\">alert(\"구매 실패 - 재고 등을 문의해주세요\");location.href = \"./shoppingbag.jsp\";</script>");
 									} finally {
 										// Connection, PreparedStatement를 닫는다.
 										try {
