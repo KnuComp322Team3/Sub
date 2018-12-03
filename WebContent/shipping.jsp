@@ -144,107 +144,8 @@
 			conn = DriverManager.getConnection(url, user, pass);
 		%>
 		<div id="content-wrapper">
-			<div class="container-fluid">
-				<!-- Breadcrumbs-->
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item active">재고 부족 상품</li>
-				</ol>
-				<!-- DataTables Example -->
-				<div class="card mb-3">
-					<div class="card-header">
-						<i class="fas fa-table"></i> 상품 목록
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered" id="dataTable" width="100%"	cellspacing="0">
-								<thead>
-									<tr>
-										<th>Product Number</th>
-										<th>Item Name</th>
-										<th>Item Spec</th>
-										<th>Item Price</th>
-										<th>재고수량</th>
-										<th>장바구니 수량</th>
-										<th>재고 수량 변경</th>
-									</tr>
-								</thead>
-								<%
-									try {
-										Class.forName("com.mysql.jdbc.Driver");//JDBC_DRIVER); 
-										//Class 클래스의 forName()함수를 이용해서 해당 클래스를 메모리로 로드 하는 것입니다.
-										//URL, ID, password를 입력하여 데이터베이스에 접속합니다.
-										conn = DriverManager.getConnection(url, user, pass);
-										conn.setAutoCommit(false);
-										String query = "";
-
-										query = "SELECT IT.product_number, IT.Item_name, IT.Item_spec, IT.Item_price, IT.Item_amount, AA.Amount "
-												+ "FROM ITEM IT, ( "
-												+ "		SELECT ic.Product_number AS Pnum, SUM(ic.Ordered_amount) AS Amount "
-												+ "		FROM INCLUDE ic,SHOPPINGBAG s "
-												+ "		WHERE ic.Transaction_number=s.Transaction_number " + "		AND s.Paydate is NULL "
-												+ "		GROUP BY ic.Product_number " + "		) AA "
-												+ "		WHERE IT.Product_number = AA.Pnum " + "		AND IT.Item_amount < AA.Amount";
-
-										pstmt = conn.prepareStatement(query);
-
-										rs = pstmt.executeQuery();
-
-										//out.println():print out given text to the current HTML doucment.
-
-										ResultSetMetaData rsmd = rs.getMetaData();
-										int cnt = rsmd.getColumnCount();
-										out.println("<tbody>");
-										while (rs.next()) {
-											out.println("<tr><form class=\"tr\" method=\"GET\" action=\"stock.jsp\" >");
-											out.println("<td><input class=\"badge badge-pill badge-light\" name = \"product_number\" value=\""
-													+ rs.getString(1) + "\"/>" + rs.getString(1) + "</td>");
-											out.println("<td>" + rs.getString(2) + "</td>");
-											out.println("<td>" + rs.getString(3) + "</td>");
-											out.println("<td>" + rs.getString(4) + "</td>");
-											out.println("<td>" + rs.getString(5) + "</td>");
-											out.println("<td>" + rs.getString(6) + "</td>");
-											//수정 버튼
-											out.println("<td>");
-											out.println(
-													"<input class=\"form-control\" type=\"number\" name=\"itemAmount\"  value=\"0\" min=\"0\" max=\"10000000\">");
-
-											out.println(
-													"<input class=\"btn btn-primary\" type=\"submit\" name=\"stockMethod\" value=\"add\"/>");
-											out.println(
-													"<input class=\"btn btn-primary\" type=\"submit\" name=\"stockMethod\" value=\"sub\"/></td></form>");
-
-											out.println("</tr>");
-										}
-
-										out.println("</tbody>");
-		
-										conn.commit();
-									} catch (ClassNotFoundException | SQLException sqle) {
-										// 오류시 롤백
-										conn.rollback();
-
-										throw new RuntimeException(sqle.getMessage());
-									} finally {
-										// Connection, PreparedStatement를 닫는다.
-										try {
-											if (pstmt != null) {
-												pstmt.close();
-												pstmt = null;
-											}
-											if (conn != null) {
-												conn.close();
-												conn = null;
-											}
-										} catch (Exception e) {
-											throw new RuntimeException(e.getMessage());
-										}
-									}
-								%>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
+			
+			
 		
 			<div class="container-fluid">
 				<!-- Breadcrumbs-->
@@ -354,6 +255,7 @@
 								<a class="btn btn-primary" href="/Subject/user/logout.jsp">로그아웃</a>
 							</div>
 						</div>
+					</div>
 					</div>
 				</div>
 			</div>

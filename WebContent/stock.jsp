@@ -43,21 +43,56 @@
 
 	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-		<a class="navbar-brand mr-1" href="index.jsp">구매내역</a>
+
+		<a class="navbar-brand mr-1" href="indexAdmin.jsp">관리자</a>
 
 		<button class="btn btn-link btn-sm text-white order-1 order-sm-0"
 			id="sidebarToggle" href="#">
+			<i class="fas fa-bars"></i>
 		</button>
 
 		<!-- Navbar Search -->
 		<form
 			class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-			
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search for..."
+					aria-label="Search" aria-describedby="basic-addon2">
+				<div class="input-group-append">
+					<button class="btn btn-primary" type="button">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
 		</form>
 
 		<!-- Navbar -->
 		<ul class="navbar-nav ml-auto ml-md-0">
-
+			<li class="nav-item dropdown no-arrow mx-1"><a
+				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> <i class="fas fa-bell fa-fw"></i> <span
+					class="badge badge-danger">9+</span>
+			</a>
+				<div class="dropdown-menu dropdown-menu-right"
+					aria-labelledby="alertsDropdown">
+					<a class="dropdown-item" href="#">Action</a> <a
+						class="dropdown-item" href="#">Another action</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#">Something else here</a>
+				</div></li>
+			<li class="nav-item dropdown no-arrow mx-1"><a
+				class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i> <span
+					class="badge badge-danger">7</span>
+			</a>
+				<div class="dropdown-menu dropdown-menu-right"
+					aria-labelledby="messagesDropdown">
+					<a class="dropdown-item" href="#">Action</a> <a
+						class="dropdown-item" href="#">Another action</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#">Something else here</a>
+				</div></li>
 			<li class="nav-item dropdown no-arrow"><a
 				class="nav-link dropdown-toggle" href="#" id="userDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -65,14 +100,11 @@
 			</a>
 				<div class="dropdown-menu dropdown-menu-right"
 					aria-labelledby="userDropdown">
-					<a class="dropdown-item" href="/Subject/user/change.jsp">회원정보
-						수정</a><a class="dropdown-item" href="stock.jsp">구매내역</a>
-					<%
-						session.getAttribute("sessionID");
-					%>
+					<a class="dropdown-item" href="#">Settings</a> <a
+						class="dropdown-item" href="#">Activity Log</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#" data-toggle="modal"
-						data-target="#logoutModal">로그아웃</a>
+						data-target="#logoutModal">Logout</a>
 				</div></li>
 		</ul>
 
@@ -82,15 +114,27 @@
 
 		<!-- Sidebar -->
 		<ul class="sidebar navbar-nav">
-			<li class="nav-item active"><a class="nav-link" href="index.jsp">
-					<i class="fas fa-fw fa-tachometer-alt"></i> <span>상품추천&카테고리</span>
+			<li class="nav-item"><a class="nav-link" href="indexAdmin.jsp">
+					<i class="fas fa-fw fa-tachometer-alt"></i> <span>관리자</span>
 			</a></li>
-			<li class="nav-item"><a class="nav-link" href="shoppingbag.jsp">
-					<i class="fas fa-fw fa-folder"></i> <span>장바구니</span>
-			</a></li>
-
-			<li class="nav-item"><a class="nav-link" href="tables.jsp">
-					<i class="fas fa-fw fa-table"></i> <span>상품 목록</span>
+			<!-- <li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" id="pagesDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> <i class="fas fa-fw fa-folder"></i> <span>Pages</span>
+			</a>
+				<div class="dropdown-menu" aria-labelledby="pagesDropdown">
+					<h6 class="dropdown-header">Login Screens:</h6>
+					<a class="dropdown-item" href="login.jsp">Login</a> <a
+						class="dropdown-item" href="register.jsp">Register</a> <a
+						class="dropdown-item" href="forgot-password.jsp">Forgot
+						Password</a>
+					<div class="dropdown-divider"></div>
+					<h6 class="dropdown-header">Other Pages:</h6>
+					<a class="dropdown-item" href="404.jsp">404 Page</a> <a
+						class="dropdown-item" href="blank.jsp">Blank Page</a>
+				</div></li> -->
+			<li class="nav-item active"><a class="nav-link" href="stock.jsp">
+					<i class="fas fa-fw fa-table"></i> <span>재고관리</span>
 			</a></li>
 		</ul>
 
@@ -101,7 +145,7 @@
 				<!-- DataTables Example -->
 				<div class="card mb-3">
 					<div class="card-header">
-						<i class="fas fa-table"></i> 장바구니
+						<i class="fas fa-table"></i> 재고현황
 					</div>
 
 					<%
@@ -131,11 +175,12 @@
 							if (stockMethod.equals("add") && (!itemAmount.equals(""))) {
 								//이 물품이 장바구니에 있을때
 								if (Integer.parseInt(request.getParameter("itemAmount")) != 0) {
-									pstmt = conn.prepareStatement("update ITEM set Item_amount=Item_amount + ? WHERE Product_number=?");
+									pstmt = conn
+											.prepareStatement("update ITEM set Item_amount=Item_amount + ? WHERE Product_number=?");
 									pstmt.setString(1, request.getParameter("itemAmount"));
 									pstmt.setString(2, request.getParameter("product_number"));
 									System.out.println("add");
-									pstmt.executeUpdate();	
+									pstmt.executeUpdate();
 								}
 							}
 							if (stockMethod.equals("sub") && (!itemAmount.equals(""))) {
@@ -154,7 +199,7 @@
 							// 오류시 롤백
 							conn.rollback();
 							out.println(
-									"<script type=\"text/javascript\">alert(\"구매 실패 - 재고 등을 확인해주세요\");location.href = \"./stock.jsp\";</script>");
+									"<script type=\"text/javascript\">alert(\"재고 추가 실패 - 재고 등을 확인해주세요\");location.href = \"./stock.jsp\";</script>");
 						} finally {
 							// Connection, PreparedStatement를 닫는다.
 							try {
@@ -220,8 +265,8 @@
 											out.println("<td>" + rs.getString(6) + "</td>");
 											//수정 버튼
 											out.println("<td>");
-											out.println("<input class=\"form-control\" type=\"number\" name=\"itemAmount\"  value=\""
-													+ rs.getString(5) + "\" min=\"0\" max=\"10000000\">");
+											out.println(
+													"<input class=\"form-control\" type=\"number\" name=\"itemAmount\"  value=\"0\" min=\"0\" max=\"10000000\">");
 
 											out.println(
 													"<input class=\"btn btn-primary\" type=\"submit\" name=\"stockMethod\" value=\"add\"/>");
@@ -258,12 +303,7 @@
 							</table>
 						</div>
 					</div>
-					<div class="card-footer small text-muted">Updated yesterday
-						at 11:59 PM</div>
 				</div>
-				
-
-
 			</div>
 			<!-- /.container-fluid -->
 
